@@ -1,0 +1,1834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Classroom Student Selectors</title>
+  <style>
+    /* Theme Palettes & Typography */
+    :root {
+      --font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --bg-main: #131722;
+      --bg-card: #1e2433;
+      --bg-input: #2a324b;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --accent: #8b5cf6;
+      --border-color: #334155;
+    }
+
+    body[data-theme="chalkboard"] {
+      --font-family: "Chalkboard SE", "Comic Sans MS", "Arial Rounded MT Bold", sans-serif;
+      --bg-main: #1c2e24;
+      --bg-card: #233b2e;
+      --bg-input: #2d4a3b;
+      --text-main: #fcfbf7;
+      --text-muted: #a3bfae;
+      --primary: #facc15;
+      --primary-hover: #eab308;
+      --success: #34d399;
+      --warning: #fb923c;
+      --danger: #f87171;
+      --accent: #fbbf24;
+      --border-color: #3d634f;
+    }
+
+    body[data-theme="neon"] {
+      --font-family: "Courier New", Courier, "Lucida Console", monospace;
+      --bg-main: #0a0a0f;
+      --bg-card: #12121f;
+      --bg-input: #1f1f38;
+      --text-main: #00ffff;
+      --text-muted: #ff77e9;
+      --primary: #00ffff;
+      --primary-hover: #00cccc;
+      --success: #00ff88;
+      --warning: #ffcc00;
+      --danger: #ff0055;
+      --accent: #d946ef;
+      --border-color: #383866;
+    }
+
+    body[data-theme="pastel"] {
+      --font-family: "Quicksand", "Century Gothic", "Segoe UI", sans-serif;
+      --bg-main: #24222f;
+      --bg-card: #302d3e;
+      --bg-input: #413d54;
+      --text-main: #fce7f3;
+      --text-muted: #d8b4fe;
+      --primary: #a78bfa;
+      --primary-hover: #8b5cf6;
+      --success: #6ee7b7;
+      --warning: #fcd34d;
+      --danger: #fda4af;
+      --accent: #c084fc;
+      --border-color: #534e6d;
+    }
+
+    body[data-theme="high-contrast"] {
+      --font-family: Impact, "Arial Black", sans-serif;
+      --bg-main: #000000;
+      --bg-card: #111111;
+      --bg-input: #262626;
+      --text-main: #ffffff;
+      --text-muted: #ffff00;
+      --primary: #ffff00;
+      --primary-hover: #e6e600;
+      --success: #00ff00;
+      --warning: #ffaa00;
+      --danger: #ff1100;
+      --accent: #ffff00;
+      --border-color: #ffffff;
+    }
+
+    body[data-theme="arcade"] {
+      --font-family: "VT323", "Courier New", monospace;
+      --bg-main: #0b0819;
+      --bg-card: #171131;
+      --bg-input: #261c52;
+      --text-main: #fde047;
+      --text-muted: #38bdf8;
+      --primary: #f59e0b;
+      --primary-hover: #d97706;
+      --success: #22c55e;
+      --warning: #eab308;
+      --danger: #ef4444;
+      --accent: #ec4899;
+      --border-color: #4c1d95;
+    }
+
+    body[data-theme="cafe"] {
+      --font-family: "Georgia", "Baskerville", serif;
+      --bg-main: #1f1b18;
+      --bg-card: #2e2620;
+      --bg-input: #42372e;
+      --text-main: #f5ebe0;
+      --text-muted: #d5bdaf;
+      --primary: #ddb892;
+      --primary-hover: #b08968;
+      --success: #7f9c7b;
+      --warning: #d4a373;
+      --danger: #b56576;
+      --accent: #cb997e;
+      --border-color: #58483d;
+    }
+
+    body[data-theme="space"] {
+      --font-family: "Trebuchet MS", "Futura", sans-serif;
+      --bg-main: #060814;
+      --bg-card: #0d122b;
+      --bg-input: #151d45;
+      --text-main: #e0e7ff;
+      --text-muted: #818cf8;
+      --primary: #6366f1;
+      --primary-hover: #4f46e5;
+      --success: #06b6d4;
+      --warning: #f59e0b;
+      --danger: #f43f5e;
+      --accent: #a855f7;
+      --border-color: #312e81;
+    }
+
+    body[data-theme="primary-edu"] {
+      --font-family: "Arial Rounded MT Bold", "Trebuchet MS", sans-serif;
+      --bg-main: #f0f4f8;
+      --bg-card: #ffffff;
+      --bg-input: #e2e8f0;
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --success: #16a34a;
+      --warning: #f59e0b;
+      --danger: #dc2626;
+      --accent: #ea580c;
+      --border-color: #cbd5e1;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+      transition: background-color 0.25s ease, color 0.2s ease, border-color 0.2s ease;
+    }
+
+    body {
+      font-family: var(--font-family);
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      position: relative;
+    }
+
+    /* Floating Sidebar Toggle Button */
+    .sidebar-toggle-btn {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      z-index: 100;
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background-color: var(--bg-card);
+      border: 2px solid var(--border-color);
+      color: var(--text-main);
+      font-size: 1.4rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+      transition: all 0.2s ease;
+    }
+
+    .sidebar-toggle-btn:hover {
+      border-color: var(--primary);
+      filter: brightness(1.15);
+    }
+
+    .sidebar-toggle-btn:active {
+      transform: scale(0.92);
+    }
+
+    /* Collapsible Sidebar */
+    nav {
+      width: 270px;
+      min-width: 270px;
+      background-color: var(--bg-card);
+      border-right: 3px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      padding: 4.25rem 1rem 1.5rem 1rem;
+      gap: 0.75rem;
+      overflow-y: auto;
+      flex-shrink: 0;
+      transition: margin-left 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 50;
+    }
+
+    nav.collapsed {
+      margin-left: -270px !important;
+    }
+
+    @media (max-width: 900px) {
+      nav {
+        margin-left: -270px;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        box-shadow: 8px 0 24px rgba(0, 0, 0, 0.6);
+      }
+      nav.expanded-mobile {
+        margin-left: 0 !important;
+      }
+    }
+
+    .nav-btn {
+      background-color: var(--bg-input);
+      border: 2px solid transparent;
+      color: var(--text-main);
+      padding: 0.95rem 0.85rem;
+      border-radius: 16px;
+      font-size: 1.15rem;
+      font-weight: 700;
+      text-align: center;
+      justify-content: center;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      transition: all 0.2s ease;
+    }
+
+    .nav-btn:hover {
+      filter: brightness(1.15);
+    }
+
+    .nav-btn.active {
+      background-color: var(--primary);
+      color: #ffffff;
+      border-color: var(--text-main);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+    }
+
+    body[data-theme="high-contrast"] .nav-btn.active,
+    body[data-theme="chalkboard"] .nav-btn.active {
+      color: #000000;
+    }
+
+    .nav-settings {
+      margin-top: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1.1rem;
+      border-top: 2px solid var(--border-color);
+      padding-top: 1.25rem;
+    }
+
+    .setting-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .setting-label {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      font-weight: 800;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      letter-spacing: 0.05em;
+    }
+
+    .modal-trigger-btn {
+      background-color: var(--bg-input);
+      border: 2px solid var(--border-color);
+      color: var(--text-main);
+      padding: 0.85rem 0.9rem;
+      border-radius: 14px;
+      font-size: 1rem;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      text-align: left;
+      gap: 0.5rem;
+    }
+
+    .modal-trigger-btn:hover {
+      border-color: var(--primary);
+      filter: brightness(1.1);
+    }
+
+    .modal-trigger-btn:active {
+      transform: scale(0.97);
+    }
+
+    .modal-trigger-val {
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.9rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 110px;
+    }
+
+    .volume-slider {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 12px;
+      border-radius: 6px;
+      background: var(--border-color);
+      outline: none;
+      cursor: pointer;
+    }
+
+    .volume-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--primary);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+      cursor: pointer;
+    }
+
+    .app-meta-footer {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding-top: 0.25rem;
+      font-size: 0.68rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      opacity: 0.65;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+    }
+
+    /* Main Workspace */
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 1.25rem 1.75rem;
+      gap: 0.75rem;
+      position: relative;
+      align-items: center;
+      justify-content: center;
+      overflow-x: auto;
+      overflow-y: auto;
+      min-width: 0;
+      height: 100vh;
+    }
+
+    .tool-view {
+      display: none;
+      width: 100%;
+      max-width: 1150px;
+      height: 100%;
+      min-height: 480px;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+
+    .tool-view.active {
+      display: flex;
+    }
+
+    /* Top Strip Controls */
+    .top-config-strip {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.25rem;
+      flex-shrink: 0;
+      flex-wrap: wrap;
+    }
+
+    .config-card {
+      background: var(--bg-input);
+      border: 2px solid var(--accent);
+      border-radius: 20px;
+      padding: 0.45rem 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+    }
+
+    .config-card-info {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      justify-content: center;
+      min-width: 120px;
+    }
+
+    .config-card-label {
+      font-size: 0.8rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+    }
+
+    .config-card-count {
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: var(--text-main);
+      line-height: 1.1;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .config-stepper {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .config-stepper-btn {
+      width: 54px;
+      height: 38px;
+      border: none;
+      background-color: var(--bg-card);
+      color: var(--text-main);
+      font-size: 1.25rem;
+      font-weight: 800;
+      font-family: inherit;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.15s;
+    }
+
+    .config-stepper-btn:hover {
+      filter: brightness(1.2);
+    }
+
+    .config-stepper-btn:active {
+      background-color: var(--accent);
+      color: #ffffff;
+      transform: scale(0.95);
+    }
+
+    /* Big Display Area */
+    .display-box {
+      background-color: var(--bg-card);
+      border: 2px solid var(--border-color);
+      border-radius: 24px;
+      width: 100%;
+      flex: 1;
+      min-height: 240px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      padding: 1.5rem;
+      overflow: hidden;
+    }
+
+    .display-digits {
+      font-size: clamp(3.5rem, 10vw, 8.5rem);
+      font-weight: 900;
+      letter-spacing: 2px;
+      text-align: center;
+      line-height: 1.1;
+      max-width: 100%;
+      text-transform: uppercase;
+      min-height: 1.1em;
+    }
+
+    .display-digits.celebrate {
+      animation: popCelebrate 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes popCelebrate {
+      0% { transform: scale(0.7); }
+      50% { transform: scale(1.15); }
+      100% { transform: scale(1); }
+    }
+
+    .display-subtext {
+      margin-top: 0.8rem;
+      font-size: clamp(1.2rem, 3.5vw, 2.2rem);
+      font-weight: 800;
+      color: var(--warning);
+      text-align: center;
+      letter-spacing: 0.05em;
+      min-height: 1.2em;
+    }
+
+    .turn-badge {
+      position: absolute;
+      top: 1.25rem;
+      left: 1.25rem;
+      background-color: var(--accent);
+      color: #ffffff;
+      padding: 0.5rem 1.4rem;
+      border-radius: 100px;
+      font-size: 1.2rem;
+      font-weight: 900;
+      z-index: 5;
+    }
+
+    /* Interactive Whimsical Wheel */
+    .wheel-stage {
+      position: relative;
+      width: 260px;
+      height: 260px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 0.75rem;
+    }
+
+    .wheel-pointer {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 16px solid transparent;
+      border-right: 16px solid transparent;
+      border-top: 30px solid var(--danger);
+      filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.5));
+      z-index: 20;
+      transform-origin: 50% 0%;
+      transition: transform 0.06s ease-out;
+    }
+
+    .wheel-pointer.kick {
+      transform: translateX(-50%) rotate(-18deg);
+    }
+
+    .wheel-hub {
+      position: absolute;
+      width: 48px;
+      height: 48px;
+      background-color: var(--bg-card);
+      border: 4px solid var(--border-color);
+      border-radius: 50%;
+      z-index: 10;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+    }
+
+    canvas.wheel-canvas {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      box-shadow: 0 8px 26px rgba(0, 0, 0, 0.45);
+      border: 4px solid var(--border-color);
+    }
+
+    /* Centered Sequences */
+    .sequence-container {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      width: 100%;
+      max-width: 1050px;
+      min-height: 90px;
+      margin: auto;
+    }
+
+    .seq-step-card {
+      background: var(--bg-input);
+      border: 2px solid var(--border-color);
+      border-radius: 16px;
+      padding: 0.85rem 1.25rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      min-width: 110px;
+      flex: 1 1 120px;
+      max-width: 180px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+      animation: popIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0.6); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .seq-step-num {
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      text-align: center;
+      width: 100%;
+    }
+
+    .seq-step-val {
+      font-size: 2.1rem;
+      font-weight: 900;
+      color: var(--primary);
+      text-align: center;
+      width: 100%;
+      white-space: nowrap;
+    }
+
+    .pool-track {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      max-width: 900px;
+      width: 100%;
+      min-height: 48px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      padding: 0.5rem 0.85rem;
+      border-radius: 16px;
+    }
+
+    .pool-chip {
+      padding: 0.4rem 0.85rem;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 800;
+      background: var(--bg-input);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+    }
+
+    .pool-chip.exhausted {
+      opacity: 0.3;
+      text-decoration: line-through;
+      border-style: dashed;
+    }
+
+    /* Control Deck & Buttons */
+    .control-deck {
+      display: flex;
+      gap: 1rem;
+      width: 100%;
+      justify-content: center;
+      align-items: center;
+      flex-shrink: 0;
+      flex-wrap: wrap;
+    }
+
+    .action-btn {
+      flex: 1;
+      max-width: 240px;
+      height: 64px;
+      border-radius: 16px;
+      border: 2px solid transparent;
+      font-size: 1.45rem;
+      font-weight: 900;
+      font-family: inherit;
+      color: #ffffff;
+      cursor: pointer;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .action-btn:active {
+      transform: translateY(2px);
+    }
+
+    .action-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-pick { background-color: var(--success); }
+    .btn-reset { background-color: var(--danger); }
+
+    .toggle-pill-btn {
+      height: 64px;
+      padding: 0 1.35rem;
+      border-radius: 16px;
+      border: 2px solid var(--border-color);
+      background-color: var(--bg-input);
+      color: var(--text-muted);
+      font-size: 1rem;
+      font-weight: 800;
+      font-family: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 155px;
+      transition: all 0.2s ease;
+    }
+
+    .toggle-pill-btn.active {
+      border-color: var(--primary);
+      color: var(--text-main);
+      background-color: var(--bg-card);
+    }
+
+    /* Modals */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background-color: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal-dialog {
+      background-color: var(--bg-card);
+      border: 3px solid var(--border-color);
+      border-radius: 28px;
+      width: 100%;
+      max-width: 800px;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+      overflow: hidden;
+    }
+
+    .modal-header {
+      padding: 1.5rem 2rem;
+      border-bottom: 2px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+
+    .modal-title {
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: var(--text-main);
+    }
+
+    .modal-close-btn {
+      width: 50px;
+      height: 50px;
+      border-radius: 14px;
+      border: 2px solid var(--border-color);
+      background-color: var(--bg-input);
+      color: var(--text-main);
+      font-size: 1.6rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-close-btn:active {
+      transform: scale(0.92);
+    }
+
+    .modal-body {
+      padding: 1.5rem 2rem;
+      overflow-y: auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+
+    .touch-tile {
+      background-color: var(--bg-input);
+      border: 3px solid var(--border-color);
+      border-radius: 18px;
+      padding: 1.25rem 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .touch-tile:hover {
+      border-color: var(--primary);
+      filter: brightness(1.1);
+    }
+
+    .touch-tile.selected {
+      border-color: var(--primary);
+      background-color: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    }
+
+    body[data-theme="high-contrast"] .touch-tile.selected,
+    body[data-theme="chalkboard"] .touch-tile.selected {
+      color: #000000;
+    }
+
+    .touch-tile-name {
+      font-size: 1.15rem;
+      font-weight: 800;
+    }
+
+    .touch-tile-desc {
+      font-size: 0.85rem;
+      opacity: 0.8;
+      font-weight: 600;
+    }
+
+    .touch-tile-preview {
+      margin-top: 0.5rem;
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: inherit;
+      padding: 0.4rem 0.85rem;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body data-theme="default">
+
+  <button class="sidebar-toggle-btn" onclick="toggleSidebar()" title="Toggle Sidebar">☰</button>
+
+  <nav id="app-sidebar">
+    <button class="nav-btn active" onclick="switchView('team-picker')">Team Selector</button>
+    <button class="nav-btn" onclick="switchView('seat-picker')">Seat Selector</button>
+    <button class="nav-btn" onclick="switchView('partner-picker')">Partner Selector</button>
+    <button class="nav-btn" onclick="switchView('seat-seq')">Seat Sequencer</button>
+    <button class="nav-btn" onclick="switchView('team-seq')">Team Sequencer</button>
+
+    <div class="nav-settings">
+      <div class="setting-group">
+        <div class="setting-label">Theme & Font</div>
+        <button class="modal-trigger-btn" onclick="openThemeModal()">
+          <span>Theme</span>
+          <span class="modal-trigger-val" id="theme-btn-val">Default Dark</span>
+        </button>
+      </div>
+
+      <div class="setting-group">
+        <div class="setting-label">Chime Sound</div>
+        <button class="modal-trigger-btn" onclick="openChimeModal()">
+          <span>Sound</span>
+          <span class="modal-trigger-val" id="chime-btn-val">Bell Toll</span>
+        </button>
+      </div>
+
+      <div class="setting-group">
+        <div class="setting-label">Spin Speed</div>
+        <button class="modal-trigger-btn" onclick="cycleSpinSpeed()">
+          <span>Speed</span>
+          <span class="modal-trigger-val" id="speed-btn-val">Normal (3s)</span>
+        </button>
+      </div>
+
+      <div class="setting-group">
+        <div class="setting-label">
+          <span>Volume</span>
+          <span id="vol-label">50%</span>
+        </div>
+        <input type="range" class="volume-slider" id="vol-slider" min="0" max="100" value="50" oninput="updateVolume(this.value)">
+      </div>
+
+      <div class="app-meta-footer">
+        <span>V1.2.0 (09-06-2026)</span>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <!-- 1. Team Selector -->
+    <section id="view-team-picker" class="tool-view active">
+      <div class="top-config-strip">
+        <div class="config-card">
+          <div class="config-card-info">
+            <span class="config-card-label">Teams Count</span>
+            <span class="config-card-count" id="team-count-val">8</span>
+          </div>
+          <div class="config-stepper">
+            <button class="config-stepper-btn" onclick="adjustTeamCount(1)">▲</button>
+            <button class="config-stepper-btn" onclick="adjustTeamCount(-1)">▼</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="display-box">
+        <div class="turn-badge" id="team-badge">Ready</div>
+        <div class="wheel-stage">
+          <div class="wheel-pointer" id="team-pointer"></div>
+          <div class="wheel-hub"></div>
+          <canvas id="team-wheel-canvas" class="wheel-canvas" width="500" height="500"></canvas>
+        </div>
+        <div class="display-digits" id="team-display"></div>
+      </div>
+
+      <div class="control-deck">
+        <button class="action-btn btn-pick" id="team-spin-btn" onclick="spinTeamWheel()">Spin Wheel</button>
+        <button class="action-btn btn-reset" onclick="resetTeamPicker()">Reset Pool</button>
+        <button class="toggle-pill-btn active" id="team-repeat-toggle" onclick="toggleNoRepeat('team')">No Repeat: ON</button>
+      </div>
+
+      <div class="pool-track" id="team-pool-chips"></div>
+    </section>
+
+    <!-- 2. Seat Selector -->
+    <section id="view-seat-picker" class="tool-view">
+      <div class="display-box">
+        <div class="turn-badge" id="seat-badge">Seats 1 - 4</div>
+        <div class="wheel-stage">
+          <div class="wheel-pointer" id="seat-pointer"></div>
+          <div class="wheel-hub"></div>
+          <canvas id="seat-wheel-canvas" class="wheel-canvas" width="500" height="500"></canvas>
+        </div>
+        <div class="display-digits" id="seat-display"></div>
+        <div class="display-subtext" id="seat-backup-display"></div>
+      </div>
+
+      <div class="control-deck">
+        <button class="action-btn btn-pick" id="seat-spin-btn" onclick="spinSeatWheel()">Spin Seat</button>
+        <button class="action-btn btn-reset" onclick="resetSeatPicker()">Reset Pool</button>
+        <button class="toggle-pill-btn active" id="seat-repeat-toggle" onclick="toggleNoRepeat('seat')">No Repeat: ON</button>
+      </div>
+
+      <div class="pool-track" id="seat-pool-chips"></div>
+    </section>
+
+    <!-- 3. Partner Selector -->
+    <section id="view-partner-picker" class="tool-view">
+      <div class="top-config-strip">
+        <div class="config-card">
+          <div class="config-card-info">
+            <span class="config-card-label">Wheel Wedges</span>
+            <span class="config-card-count" id="partner-wedge-val">8</span>
+          </div>
+          <div class="config-stepper">
+            <button class="config-stepper-btn" onclick="adjustPartnerWedges(2)">▲</button>
+            <button class="config-stepper-btn" onclick="adjustPartnerWedges(-2)">▼</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="display-box">
+        <div class="turn-badge">Partner Wheel</div>
+        <div class="wheel-stage">
+          <div class="wheel-pointer" id="partner-pointer"></div>
+          <div class="wheel-hub"></div>
+          <canvas id="partner-wheel-canvas" class="wheel-canvas" width="500" height="500"></canvas>
+        </div>
+        <div class="display-digits" id="partner-display"></div>
+      </div>
+
+      <div class="control-deck">
+        <button class="action-btn btn-pick" id="partner-spin-btn" onclick="spinPartnerWheel()">Spin Partner</button>
+        <button class="toggle-pill-btn" onclick="togglePartnerFlipMode()" id="partner-mode-pill">Mode: Random Spin</button>
+      </div>
+    </section>
+
+    <!-- 4. Seat Sequencer -->
+    <section id="view-seat-seq" class="tool-view">
+      <div class="display-box">
+        <div class="turn-badge">Seat Order (1-4)</div>
+        <div class="sequence-container" id="seat-seq-deck"></div>
+      </div>
+
+      <div class="control-deck">
+        <button class="action-btn btn-pick" onclick="generateSeatSequence()">Shuffle Order</button>
+        <button class="action-btn btn-reset" onclick="clearSeatSequence()">Clear</button>
+      </div>
+    </section>
+
+    <!-- 5. Team Sequencer -->
+    <section id="view-team-seq" class="tool-view">
+      <div class="top-config-strip">
+        <div class="config-card">
+          <div class="config-card-info">
+            <span class="config-card-label">Teams to Order</span>
+            <span class="config-card-count" id="team-seq-count-val">8</span>
+          </div>
+          <div class="config-stepper">
+            <button class="config-stepper-btn" onclick="adjustSeqTeamCount(1)">▲</button>
+            <button class="config-stepper-btn" onclick="adjustSeqTeamCount(-1)">▼</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="display-box">
+        <div class="turn-badge">Team Sequence</div>
+        <div class="sequence-container" id="team-seq-deck"></div>
+      </div>
+
+      <div class="control-deck">
+        <button class="action-btn btn-pick" onclick="generateTeamSequence()">Shuffle Order</button>
+        <button class="action-btn btn-reset" onclick="clearTeamSequence()">Clear</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Theme Modal Overlay -->
+  <div class="modal-backdrop" id="theme-modal" onclick="closeModalOnBackdrop(event, 'theme-modal')">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div class="modal-title">Choose Theme & Font</div>
+        <button class="modal-close-btn" onclick="closeModal('theme-modal')">✕</button>
+      </div>
+      <div class="modal-body" id="theme-tile-grid"></div>
+    </div>
+  </div>
+
+  <!-- Sound Modal Overlay -->
+  <div class="modal-backdrop" id="chime-modal" onclick="closeModalOnBackdrop(event, 'chime-modal')">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div class="modal-title">Choose Chime Sound</div>
+        <button class="modal-close-btn" onclick="closeModal('chime-modal')">✕</button>
+      </div>
+      <div class="modal-body" id="chime-tile-grid"></div>
+    </div>
+  </div>
+
+  <script>
+    /* Responsive Sidebar Drawer */
+    const sidebar = document.getElementById('app-sidebar');
+
+    function toggleSidebar() {
+      if (window.innerWidth <= 900) {
+        sidebar.classList.toggle('expanded-mobile');
+      } else {
+        sidebar.classList.toggle('collapsed');
+      }
+    }
+
+    function handleMobileNavClick() {
+      if (window.innerWidth <= 900) {
+        sidebar.classList.remove('expanded-mobile');
+      }
+    }
+
+    function switchView(viewId) {
+      document.querySelectorAll('.tool-view').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+      document.getElementById(`view-${viewId}`).classList.add('active');
+      event.currentTarget.classList.add('active');
+      handleMobileNavClick();
+    }
+
+    /* Web Audio Synthesis & Compressor */
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    const preGainNode = audioCtx.createGain();
+    preGainNode.gain.setValueAtTime(2.5, audioCtx.currentTime);
+
+    const compressorNode = audioCtx.createDynamicsCompressor();
+    compressorNode.threshold.setValueAtTime(-12, audioCtx.currentTime);
+    compressorNode.knee.setValueAtTime(8, audioCtx.currentTime);
+    compressorNode.ratio.setValueAtTime(12, audioCtx.currentTime);
+    compressorNode.attack.setValueAtTime(0.003, audioCtx.currentTime);
+    compressorNode.release.setValueAtTime(0.25, audioCtx.currentTime);
+
+    const masterGainNode = audioCtx.createGain();
+    preGainNode.connect(masterGainNode);
+    masterGainNode.connect(compressorNode);
+    compressorNode.connect(audioCtx.destination);
+
+    let currentVolume = parseFloat(localStorage.getItem('selector_volume') ?? '0.5');
+    let currentChime = localStorage.getItem('selector_chime') ?? 'bell';
+    let currentTheme = localStorage.getItem('selector_theme') ?? 'default';
+
+    /* Spin Speeds */
+    const spinSpeeds = [
+      { id: 'fast', name: 'Fast (1.8s)', duration: 1800, minTurns: 3 },
+      { id: 'normal', name: 'Normal (3.0s)', duration: 3000, minTurns: 5 },
+      { id: 'slow', name: 'Dramatic (4.5s)', duration: 4500, minTurns: 7 }
+    ];
+    let currentSpeedIndex = parseInt(localStorage.getItem('selector_speed_idx') ?? '1', 10);
+
+    function cycleSpinSpeed() {
+      currentSpeedIndex = (currentSpeedIndex + 1) % spinSpeeds.length;
+      localStorage.setItem('selector_speed_idx', currentSpeedIndex.toString());
+      document.getElementById('speed-btn-val').innerText = spinSpeeds[currentSpeedIndex].name;
+    }
+
+    function setMasterGain(vol) {
+      masterGainNode.gain.setValueAtTime(vol, audioCtx.currentTime);
+    }
+    setMasterGain(currentVolume);
+
+    function updateVolume(val) {
+      currentVolume = val / 100;
+      setMasterGain(currentVolume);
+      document.getElementById('vol-label').innerText = `${val}%`;
+      localStorage.setItem('selector_volume', currentVolume.toString());
+    }
+
+    /* Theme Definitions */
+    const themesList = [
+      { id: 'default', name: 'Default Dark', desc: 'Modern System Sans' },
+      { id: 'chalkboard', name: 'Classroom Chalkboard', desc: 'Warm Casual Font' },
+      { id: 'neon', name: 'Digital Neon', desc: 'Glowing Monospace' },
+      { id: 'pastel', name: 'Warm Pastel', desc: 'Rounded Soft Sans' },
+      { id: 'arcade', name: 'Retro Arcade', desc: '8-Bit Pixel Vintage' },
+      { id: 'cafe', name: 'Cozy Cafe', desc: 'Warm Classic Serif' },
+      { id: 'space', name: 'Deep Space', desc: 'Cosmic Sci-Fi Sans' },
+      { id: 'primary-edu', name: 'Elementary Light', desc: 'Bright Playful Sans' },
+      { id: 'high-contrast', name: 'High Contrast', desc: 'Bold Accessibility' }
+    ];
+
+    /* Chime Definitions */
+    const chimesList = [
+      { id: 'bell', name: 'Bell Toll', desc: 'Two Deep Church Chimes' },
+      { id: 'harp', name: 'Harp Chime', desc: 'Ascending Glissando' },
+      { id: 'beep', name: 'Digital Beep', desc: '3 Electronic Pulses' },
+      { id: 'marimba', name: 'Marimba Chime', desc: 'Warm Wooden Triad' },
+      { id: 'arcade', name: '8-Bit Level Up', desc: 'Arcade Coin Fanfare' },
+      { id: 'zen', name: 'Singing Bowl', desc: 'Resonant Brass Gong' },
+      { id: 'school', name: 'School Bell', desc: 'Mechanical Ring' },
+      { id: 'sonar', name: 'Radar Ping', desc: 'Submarine Echo' }
+    ];
+
+    function playTick() {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(900, audioCtx.currentTime);
+      gain.gain.setValueAtTime(0.18, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.035);
+      osc.connect(gain);
+      gain.connect(preGainNode);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.035);
+    }
+
+    function playSoundBell() {
+      for (let i = 0; i < 2; i++) {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(587.33, audioCtx.currentTime + (i * 0.45));
+        gain.gain.setValueAtTime(0.85, audioCtx.currentTime + (i * 0.45));
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + (i * 0.45) + 1.2);
+        osc.connect(gain);
+        gain.connect(preGainNode);
+        osc.start(audioCtx.currentTime + (i * 0.45));
+        osc.stop(audioCtx.currentTime + (i * 0.45) + 1.2);
+      }
+    }
+
+    function playSoundHarp() {
+      const notes = [440, 554.37, 659.25, 880, 1108.73, 1318.51];
+      notes.forEach((freq, idx) => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime + idx * 0.06);
+        gain.gain.setValueAtTime(0.75, audioCtx.currentTime + idx * 0.06);
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + idx * 0.06 + 0.9);
+        osc.connect(gain);
+        gain.connect(preGainNode);
+        osc.start(audioCtx.currentTime + idx * 0.06);
+        osc.stop(audioCtx.currentTime + idx * 0.06 + 0.9);
+      });
+    }
+
+    function playSoundBeep() {
+      for (let i = 0; i < 3; i++) {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(880, audioCtx.currentTime + (i * 0.15));
+        gain.gain.setValueAtTime(0.35, audioCtx.currentTime + (i * 0.15));
+        gain.gain.setValueAtTime(0.0001, audioCtx.currentTime + (i * 0.15) + 0.1);
+        osc.connect(gain);
+        gain.connect(preGainNode);
+        osc.start(audioCtx.currentTime + (i * 0.15));
+        osc.stop(audioCtx.currentTime + (i * 0.15) + 0.1);
+      }
+    }
+
+    function playSoundMarimba() {
+      const notes = [523.25, 659.25, 783.99, 1046.50];
+      notes.forEach((freq, idx) => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime + idx * 0.1);
+        gain.gain.setValueAtTime(0.85, audioCtx.currentTime + idx * 0.1);
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + idx * 0.1 + 0.45);
+        osc.connect(gain);
+        gain.connect(preGainNode);
+        osc.start(audioCtx.currentTime + idx * 0.1);
+        osc.stop(audioCtx.currentTime + idx * 0.1 + 0.45);
+      });
+    }
+
+    function playSoundArcade() {
+      const notes = [261.63, 329.63, 392.00, 523.25, 659.25, 783.99];
+      notes.forEach((freq, idx) => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime + idx * 0.05);
+        gain.gain.setValueAtTime(0.45, audioCtx.currentTime + idx * 0.05);
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + idx * 0.05 + 0.2);
+        osc.connect(gain);
+        gain.connect(preGainNode);
+        osc.start(audioCtx.currentTime + idx * 0.05);
+        osc.stop(audioCtx.currentTime + idx * 0.05 + 0.2);
+      });
+    }
+
+    function playSoundZen() {
+      [220, 222, 440].forEach(freq => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.55, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 2.5);
+        osc.connect(gain);
+        gain.connect(preGainNode);
+        osc.start(audioCtx.currentTime);
+        osc.stop(audioCtx.currentTime + 2.5);
+      });
+    }
+
+    function playSoundSchool() {
+      const startTime = audioCtx.currentTime;
+      for (let i = 0; i < 24; i++) {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(800 + (i % 2) * 120, startTime + i * 0.045);
+        gain.gain.setValueAtTime(0.45, startTime + i * 0.045);
+        gain.gain.exponentialRampToValueAtTime(0.001, startTime + i * 0.045 + 0.04);
+        osc.connect(gain);
+        gain.connect(preGainNode);
+        osc.start(startTime + i * 0.045);
+        osc.stop(startTime + i * 0.045 + 0.04);
+      }
+    }
+
+    function playSoundSonar() {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(1480, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(1100, audioCtx.currentTime + 1.2);
+      gain.gain.setValueAtTime(0.85, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 1.8);
+      osc.connect(gain);
+      gain.connect(preGainNode);
+      osc.start(audioCtx.currentTime);
+      osc.stop(audioCtx.currentTime + 1.8);
+    }
+
+    function playSoundById(id) {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      if (id === 'bell') playSoundBell();
+      else if (id === 'harp') playSoundHarp();
+      else if (id === 'beep') playSoundBeep();
+      else if (id === 'marimba') playSoundMarimba();
+      else if (id === 'arcade') playSoundArcade();
+      else if (id === 'zen') playSoundZen();
+      else if (id === 'school') playSoundSchool();
+      else if (id === 'sonar') playSoundSonar();
+    }
+
+    function playChime() {
+      playSoundById(currentChime);
+    }
+
+    /* Modals Control */
+    function openThemeModal() {
+      renderThemeTiles();
+      document.getElementById('theme-modal').classList.add('open');
+    }
+
+    function openChimeModal() {
+      renderChimeTiles();
+      document.getElementById('chime-modal').classList.add('open');
+    }
+
+    function closeModal(modalId) {
+      document.getElementById(modalId).classList.remove('open');
+    }
+
+    function closeModalOnBackdrop(e, modalId) {
+      if (e.target === document.getElementById(modalId)) {
+        closeModal(modalId);
+      }
+    }
+
+    function renderThemeTiles() {
+      const grid = document.getElementById('theme-tile-grid');
+      grid.innerHTML = '';
+      themesList.forEach(t => {
+        const tile = document.createElement('div');
+        tile.className = `touch-tile ${currentTheme === t.id ? 'selected' : ''}`;
+        tile.onclick = () => {
+          updateTheme(t.id);
+          renderThemeTiles();
+        };
+        tile.innerHTML = `
+          <div class="touch-tile-name">${t.name}</div>
+          <div class="touch-tile-desc">${t.desc}</div>
+        `;
+        grid.appendChild(tile);
+      });
+    }
+
+    function renderChimeTiles() {
+      const grid = document.getElementById('chime-tile-grid');
+      grid.innerHTML = '';
+      chimesList.forEach(c => {
+        const tile = document.createElement('div');
+        tile.className = `touch-tile ${currentChime === c.id ? 'selected' : ''}`;
+        tile.onclick = (e) => {
+          if (!e.target.classList.contains('touch-tile-preview')) {
+            updateChime(c.id);
+            renderChimeTiles();
+          }
+        };
+        tile.innerHTML = `
+          <div class="touch-tile-name">${c.name}</div>
+          <div class="touch-tile-desc">${c.desc}</div>
+          <button class="touch-tile-preview" onclick="playSoundById('${c.id}')">Test</button>
+        `;
+        grid.appendChild(tile);
+      });
+    }
+
+    function updateTheme(val) {
+      currentTheme = val;
+      document.body.setAttribute('data-theme', val);
+      localStorage.setItem('selector_theme', val);
+      const match = themesList.find(t => t.id === val);
+      if (match) document.getElementById('theme-btn-val').innerText = match.name;
+      drawWheel(teamCanvas, teamItems, teamCurrentAngle);
+      drawWheel(seatCanvas, seatItems, seatCurrentAngle);
+      drawWheel(partnerCanvas, partnerItems, partnerCurrentAngle);
+    }
+
+    function updateChime(val) {
+      currentChime = val;
+      localStorage.setItem('selector_chime', val);
+      const match = chimesList.find(c => c.id === val);
+      if (match) document.getElementById('chime-btn-val').innerText = match.name;
+    }
+
+    /* Common Shuffle */
+    function shuffleArray(arr) {
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    /* -------------------------------------------------------------
+       WHEEL ENGINE
+    ------------------------------------------------------------- */
+    const wheelPalette = [
+      '#ef4444', '#f59e0b', '#10b981', '#06b6d4', 
+      '#3b82f6', '#8b5cf6', '#ec4899', '#f97316', '#14b8a6'
+    ];
+
+    function drawWheel(canvas, items, rotationAngle = 0) {
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width;
+      const h = canvas.height;
+      const radius = w / 2;
+      const total = items.length;
+      const sliceAngle = (2 * Math.PI) / total;
+
+      ctx.clearRect(0, 0, w, h);
+      ctx.save();
+      ctx.translate(radius, radius);
+      ctx.rotate(rotationAngle);
+
+      items.forEach((item, i) => {
+        const start = i * sliceAngle;
+        const end = start + sliceAngle;
+
+        // Alternating custom colors or default palette
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.arc(0, 0, radius - 4, start, end);
+        ctx.closePath();
+        ctx.fillStyle = item.color || wheelPalette[i % wheelPalette.length];
+        ctx.fill();
+
+        ctx.lineWidth = 4;
+        ctx.strokeStyle = '#1e2433';
+        ctx.stroke();
+
+        ctx.save();
+        ctx.rotate(start + sliceAngle / 2);
+        ctx.textAlign = 'right';
+        ctx.fillStyle = '#ffffff';
+        ctx.font = total > 10 ? 'bold 24px system-ui, sans-serif' : 'bold 30px system-ui, sans-serif';
+        ctx.shadowColor = 'rgba(0,0,0,0.6)';
+        ctx.shadowBlur = 6;
+        ctx.fillText(item.label, radius - 28, 10);
+        ctx.restore();
+      });
+
+      ctx.restore();
+    }
+
+    function animateWheelSpin(canvas, pointerEl, items, currentAngle, targetIndex, onComplete) {
+      const total = items.length;
+      const sliceAngle = (2 * Math.PI) / total;
+      
+      const targetCenterAngle = (targetIndex * sliceAngle) + (sliceAngle / 2);
+      const desiredFinalAngleMod = (1.5 * Math.PI - targetCenterAngle) % (2 * Math.PI);
+      const normalizedFinalAngle = (desiredFinalAngleMod + 2 * Math.PI) % (2 * Math.PI);
+
+      const currentMod = currentAngle % (2 * Math.PI);
+      const deltaToFinal = (normalizedFinalAngle - currentMod + 2 * Math.PI) % (2 * Math.PI);
+      
+      // Speed config
+      const speedConfig = spinSpeeds[currentSpeedIndex];
+      const extraSpins = speedConfig.minTurns * 2 * Math.PI;
+      const totalDelta = deltaToFinal + extraSpins;
+      const startAngle = currentAngle;
+      const finalAngle = currentAngle + totalDelta;
+
+      const duration = speedConfig.duration;
+      const startTime = performance.now();
+      let lastSlicePassed = Math.floor((startAngle / sliceAngle));
+
+      function frame(now) {
+        const elapsed = now - startTime;
+        const progress = Math.min(1, elapsed / duration);
+        const easeOut = 1 - Math.pow(1 - progress, 3);
+        const currentRot = startAngle + (totalDelta * easeOut);
+
+        drawWheel(canvas, items, currentRot);
+
+        const currentSlice = Math.floor((currentRot / sliceAngle));
+        if (currentSlice !== lastSlicePassed) {
+          playTick();
+          pointerEl.classList.add('kick');
+          setTimeout(() => pointerEl.classList.remove('kick'), 50);
+          lastSlicePassed = currentSlice;
+        }
+
+        if (progress < 1) {
+          requestAnimationFrame(frame);
+        } else {
+          pointerEl.classList.remove('kick');
+          onComplete(finalAngle);
+        }
+      }
+      requestAnimationFrame(frame);
+    }
+
+    /* 1. Team Selector Logic */
+    let teamCount = 8;
+    let teamNoRepeat = true;
+    let teamPool = [];
+    let teamCurrentAngle = 0;
+    let teamSpinning = false;
+    const teamCanvas = document.getElementById('team-wheel-canvas');
+    let teamItems = [];
+
+    function initTeamPool() {
+      teamPool = Array.from({ length: teamCount }, (_, i) => i + 1);
+      teamItems = Array.from({ length: teamCount }, (_, i) => ({ label: `T${i+1}`, id: i + 1 }));
+      drawWheel(teamCanvas, teamItems, teamCurrentAngle);
+      renderTeamPoolChips();
+    }
+
+    function adjustTeamCount(delta) {
+      if (teamSpinning) return;
+      const newCount = teamCount + delta;
+      if (newCount >= 3 && newCount <= 9) {
+        teamCount = newCount;
+        document.getElementById('team-count-val').innerText = teamCount;
+        initTeamPool();
+        document.getElementById('team-display').innerText = '';
+      }
+    }
+
+    function renderTeamPoolChips() {
+      const container = document.getElementById('team-pool-chips');
+      container.innerHTML = '';
+      for (let i = 1; i <= teamCount; i++) {
+        const chip = document.createElement('div');
+        chip.className = 'pool-chip';
+        if (!teamPool.includes(i) && teamNoRepeat) chip.classList.add('exhausted');
+        chip.innerText = `Team ${i}`;
+        container.appendChild(chip);
+      }
+    }
+
+    function spinTeamWheel() {
+      if (teamSpinning) return;
+      if (teamNoRepeat && teamPool.length === 0) {
+        initTeamPool();
+      }
+
+      teamSpinning = true;
+      document.getElementById('team-spin-btn').disabled = true;
+      document.getElementById('team-display').classList.remove('celebrate');
+      document.getElementById('team-display').innerText = '...';
+
+      const pool = teamNoRepeat ? teamPool : Array.from({ length: teamCount }, (_, i) => i + 1);
+      const chosenVal = pool[Math.floor(Math.random() * pool.length)];
+      const targetIndex = teamItems.findIndex(item => item.id === chosenVal);
+
+      const pointer = document.getElementById('team-pointer');
+      animateWheelSpin(teamCanvas, pointer, teamItems, teamCurrentAngle, targetIndex, (newAngle) => {
+        teamCurrentAngle = newAngle;
+        teamSpinning = false;
+        document.getElementById('team-spin-btn').disabled = false;
+
+        if (teamNoRepeat) {
+          const idx = teamPool.indexOf(chosenVal);
+          if (idx !== -1) teamPool.splice(idx, 1);
+        }
+
+        const disp = document.getElementById('team-display');
+        disp.innerText = `Team ${chosenVal}`;
+        disp.classList.add('celebrate');
+        document.getElementById('team-badge').innerText = teamNoRepeat ? `${teamPool.length} Left` : 'No Repeat Off';
+        renderTeamPoolChips();
+        playChime();
+      });
+    }
+
+    function resetTeamPicker() {
+      if (teamSpinning) return;
+      initTeamPool();
+      document.getElementById('team-display').innerText = '';
+      document.getElementById('team-badge').innerText = 'Ready';
+    }
+
+    /* 2. Seat Selector Logic */
+    let seatNoRepeat = true;
+    let seatPool = [1, 2, 3, 4];
+    let seatCurrentAngle = 0;
+    let seatSpinning = false;
+    const seatCanvas = document.getElementById('seat-wheel-canvas');
+    const seatItems = [
+      { label: 'Seat 1', id: 1 },
+      { label: 'Seat 2', id: 2 },
+      { label: 'Seat 3', id: 3 },
+      { label: 'Seat 4', id: 4 }
+    ];
+
+    function initSeatPool() {
+      seatPool = [1, 2, 3, 4];
+      drawWheel(seatCanvas, seatItems, seatCurrentAngle);
+      renderSeatPoolChips();
+    }
+
+    function renderSeatPoolChips() {
+      const container = document.getElementById('seat-pool-chips');
+      container.innerHTML = '';
+      [1, 2, 3, 4].forEach(s => {
+        const chip = document.createElement('div');
+        chip.className = 'pool-chip';
+        if (!seatPool.includes(s) && seatNoRepeat) chip.classList.add('exhausted');
+        chip.innerText = `Seat ${s}`;
+        container.appendChild(chip);
+      });
+    }
+
+    function spinSeatWheel() {
+      if (seatSpinning) return;
+      if (seatNoRepeat && seatPool.length === 0) {
+        initSeatPool();
+      }
+
+      seatSpinning = true;
+      document.getElementById('seat-spin-btn').disabled = true;
+      document.getElementById('seat-display').classList.remove('celebrate');
+      document.getElementById('seat-display').innerText = '...';
+      document.getElementById('seat-backup-display').innerText = '';
+
+      const pool = seatNoRepeat ? seatPool : [1, 2, 3, 4];
+      const chosenSeat = pool[Math.floor(Math.random() * pool.length)];
+      const targetIndex = seatItems.findIndex(i => i.id === chosenSeat);
+
+      const pointer = document.getElementById('seat-pointer');
+      animateWheelSpin(seatCanvas, pointer, seatItems, seatCurrentAngle, targetIndex, (newAngle) => {
+        seatCurrentAngle = newAngle;
+        seatSpinning = false;
+        document.getElementById('seat-spin-btn').disabled = false;
+
+        if (seatNoRepeat) {
+          const idx = seatPool.indexOf(chosenSeat);
+          if (idx !== -1) seatPool.splice(idx, 1);
+        }
+
+        const altSeat = (chosenSeat % 4) + 1;
+        const disp = document.getElementById('seat-display');
+        disp.innerText = `Seat ${chosenSeat}`;
+        disp.classList.add('celebrate');
+        document.getElementById('seat-backup-display').innerText = `(Empty Seat Plan: Seat ${altSeat} answers)`;
+        document.getElementById('seat-badge').innerText = seatNoRepeat ? `${seatPool.length} Left` : 'No Repeat Off';
+        renderSeatPoolChips();
+        playChime();
+      });
+    }
+
+    function resetSeatPicker() {
+      if (seatSpinning) return;
+      initSeatPool();
+      document.getElementById('seat-display').innerText = '';
+      document.getElementById('seat-backup-display').innerText = '';
+      document.getElementById('seat-badge').innerText = 'Seats 1 - 4';
+    }
+
+    function toggleNoRepeat(type) {
+      if (type === 'team') {
+        teamNoRepeat = !teamNoRepeat;
+        const btn = document.getElementById('team-repeat-toggle');
+        btn.innerText = `No Repeat: ${teamNoRepeat ? 'ON' : 'OFF'}`;
+        btn.classList.toggle('active', teamNoRepeat);
+        initTeamPool();
+      } else if (type === 'seat') {
+        seatNoRepeat = !seatNoRepeat;
+        const btn = document.getElementById('seat-repeat-toggle');
+        btn.innerText = `No Repeat: ${seatNoRepeat ? 'ON' : 'OFF'}`;
+        btn.classList.toggle('active', seatNoRepeat);
+        initSeatPool();
+      }
+    }
+
+    /* 3. Partner Selector Logic (Alternating Wedges) */
+    let partnerFlipMode = false;
+    let partnerToggleState = 'A';
+    let partnerCurrentAngle = 0;
+    let partnerSpinning = false;
+    let partnerWedgeCount = 8; // Default 8 alternating wedges
+    const partnerCanvas = document.getElementById('partner-wheel-canvas');
+    let partnerItems = [];
+
+    function initPartnerItems() {
+      partnerItems = [];
+      const colorA = '#3b82f6'; // Blue
+      const colorB = '#ec4899'; // Pink/Rose
+      for (let i = 0; i < partnerWedgeCount; i++) {
+        const isA = i % 2 === 0;
+        partnerItems.push({
+          label: isA ? 'A' : 'B',
+          id: isA ? 'A' : 'B',
+          color: isA ? colorA : colorB
+        });
+      }
+      drawWheel(partnerCanvas, partnerItems, partnerCurrentAngle);
+    }
+
+    function adjustPartnerWedges(delta) {
+      if (partnerSpinning) return;
+      const newCount = partnerWedgeCount + delta;
+      if (newCount >= 4 && newCount <= 16) {
+        partnerWedgeCount = newCount;
+        document.getElementById('partner-wedge-val').innerText = partnerWedgeCount;
+        initPartnerItems();
+      }
+    }
+
+    function togglePartnerFlipMode() {
+      partnerFlipMode = !partnerFlipMode;
+      document.getElementById('partner-mode-pill').innerText = partnerFlipMode ? 'Mode: Alternate A/B' : 'Mode: Random Spin';
+      document.getElementById('partner-mode-pill').classList.toggle('active', partnerFlipMode);
+    }
+
+    function spinPartnerWheel() {
+      if (partnerSpinning) return;
+      partnerSpinning = true;
+      document.getElementById('partner-spin-btn').disabled = true;
+      document.getElementById('partner-display').classList.remove('celebrate');
+      document.getElementById('partner-display').innerText = '...';
+
+      let chosen = '';
+      if (partnerFlipMode) {
+        chosen = partnerToggleState;
+        partnerToggleState = (partnerToggleState === 'A') ? 'B' : 'A';
+      } else {
+        chosen = Math.random() < 0.5 ? 'A' : 'B';
+      }
+
+      // Pick any matching alternating wedge on the wheel
+      const matchingIndices = partnerItems
+        .map((item, idx) => item.id === chosen ? idx : -1)
+        .filter(idx => idx !== -1);
+      const targetIndex = matchingIndices[Math.floor(Math.random() * matchingIndices.length)];
+
+      const pointer = document.getElementById('partner-pointer');
+      animateWheelSpin(partnerCanvas, pointer, partnerItems, partnerCurrentAngle, targetIndex, (newAngle) => {
+        partnerCurrentAngle = newAngle;
+        partnerSpinning = false;
+        document.getElementById('partner-spin-btn').disabled = false;
+
+        const disp = document.getElementById('partner-display');
+        disp.innerText = `Partner ${chosen}`;
+        disp.classList.add('celebrate');
+        playChime();
+      });
+    }
+
+    /* 4. Seat Sequencer Logic */
+    function generateSeatSequence() {
+      const order = shuffleArray([1, 2, 3, 4]);
+      const deck = document.getElementById('seat-seq-deck');
+      deck.innerHTML = '';
+      const labels = ['1st', '2nd', '3rd', '4th'];
+
+      order.forEach((seat, i) => {
+        const card = document.createElement('div');
+        card.className = 'seq-step-card';
+        card.innerHTML = `
+          <div class="seq-step-num">${labels[i]}</div>
+          <div class="seq-step-val">Seat ${seat}</div>
+        `;
+        deck.appendChild(card);
+      });
+      playChime();
+    }
+
+    function clearSeatSequence() {
+      document.getElementById('seat-seq-deck').innerHTML = '';
+    }
+
+    /* 5. Team Sequencer Logic */
+    let seqTeamCount = 8;
+
+    function adjustSeqTeamCount(delta) {
+      const newCount = seqTeamCount + delta;
+      if (newCount >= 3 && newCount <= 9) {
+        seqTeamCount = newCount;
+        document.getElementById('team-seq-count-val').innerText = seqTeamCount;
+        clearTeamSequence();
+      }
+    }
+
+    function getOrdinal(n) {
+      const s = ['th', 'st', 'nd', 'rd'];
+      const v = n % 100;
+      return n + (s[(v - 20) % 10] || s[v] || s[0]);
+    }
+
+    function generateTeamSequence() {
+      const teams = Array.from({ length: seqTeamCount }, (_, i) => i + 1);
+      const order = shuffleArray(teams);
+      const deck = document.getElementById('team-seq-deck');
+      deck.innerHTML = '';
+
+      order.forEach((team, i) => {
+        const card = document.createElement('div');
+        card.className = 'seq-step-card';
+        card.innerHTML = `
+          <div class="seq-step-num">${getOrdinal(i + 1)}</div>
+          <div class="seq-step-val">Team ${team}</div>
+        `;
+        deck.appendChild(card);
+      });
+      playChime();
+    }
+
+    function clearTeamSequence() {
+      document.getElementById('team-seq-deck').innerHTML = '';
+    }
+
+    /* Hydrate Preferences & Init */
+    document.getElementById('vol-slider').value = Math.round(currentVolume * 100);
+    document.getElementById('vol-label').innerText = `${Math.round(currentVolume * 100)}%`;
+
+    const initialThemeMatch = themesList.find(t => t.id === currentTheme);
+    if (initialThemeMatch) document.getElementById('theme-btn-val').innerText = initialThemeMatch.name;
+
+    const initialChimeMatch = chimesList.find(c => c.id === currentChime);
+    if (initialChimeMatch) document.getElementById('chime-btn-val').innerText = initialChimeMatch.name;
+
+    document.getElementById('speed-btn-val').innerText = spinSpeeds[currentSpeedIndex].name;
+
+    document.body.setAttribute('data-theme', currentTheme);
+
+    initTeamPool();
+    initSeatPool();
+    initPartnerItems();
+  </script>
+</body>
+</html>
