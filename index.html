@@ -380,7 +380,7 @@
     .tool-view {
       display: none;
       width: 100%;
-      max-width: 1150px;
+      max-width: 1200px;
       height: 100%;
       min-height: 480px;
       flex-direction: column;
@@ -485,19 +485,21 @@
       align-items: center;
       justify-content: center;
       position: relative;
-      padding: 1.5rem;
-      overflow: hidden;
+      padding: 1.5rem 1rem 1rem 1rem;
+      overflow: visible;
+      container-type: size;
     }
 
     .display-digits {
-      font-size: clamp(3.5rem, 10vw, 8.5rem);
+      font-size: clamp(2.5rem, 6cqh, 4.8rem);
       font-weight: 900;
       letter-spacing: 2px;
       text-align: center;
       line-height: 1.1;
       max-width: 100%;
       text-transform: uppercase;
-      min-height: 1.1em;
+      min-height: 1.15em;
+      flex-shrink: 0;
     }
 
     .display-digits.celebrate {
@@ -522,54 +524,45 @@
       pointer-events: none;
     }
 
-    .turn-badge {
-      position: absolute;
-      top: 1.25rem;
-      left: 1.25rem;
-      background-color: var(--accent);
-      color: #ffffff;
-      padding: 0.5rem 1.4rem;
-      border-radius: 100px;
-      font-size: 1.2rem;
-      font-weight: 900;
-      z-index: 5;
-    }
-
-    /* Interactive Whimsical Wheel */
+    /* Interactive Whimsical Wheel (Responsive Sizing) */
     .wheel-stage {
       position: relative;
-      width: 260px;
-      height: 260px;
+      width: min(calc(100cqh - 5.5rem), calc(100cqw - 4rem), 520px);
+      height: min(calc(100cqh - 5.5rem), calc(100cqw - 4rem), 520px);
+      aspect-ratio: 1 / 1;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 0.75rem;
+      margin: auto;
+      flex-shrink: 0;
     }
 
+    /* Game-Show Flipping Triangle Pointer */
     .wheel-pointer {
       position: absolute;
-      top: -12px;
+      top: -20px;
       left: 50%;
-      transform: translateX(-50%);
+      margin-left: -18px;
       width: 0;
       height: 0;
-      border-left: 16px solid transparent;
-      border-right: 16px solid transparent;
-      border-top: 30px solid var(--danger);
-      filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.5));
-      z-index: 20;
+      border-left: 18px solid transparent;
+      border-right: 18px solid transparent;
+      border-top: 36px solid var(--danger);
+      filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.6));
+      z-index: 40;
       transform-origin: 50% 0%;
-      transition: transform 0.06s ease-out;
+      transition: transform 0.05s ease-out;
+      pointer-events: none;
     }
 
     .wheel-pointer.kick {
-      transform: translateX(-50%) rotate(-18deg);
+      transform: rotate(-24deg);
     }
 
     .wheel-hub {
       position: absolute;
-      width: 48px;
-      height: 48px;
+      width: clamp(38px, 12%, 60px);
+      height: clamp(38px, 12%, 60px);
       background-color: var(--bg-card);
       border: 4px solid var(--border-color);
       border-radius: 50%;
@@ -581,8 +574,68 @@
       width: 100%;
       height: 100%;
       border-radius: 50%;
-      box-shadow: 0 8px 26px rgba(0, 0, 0, 0.45);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
       border: 4px solid var(--border-color);
+    }
+
+    /* Dual Independent Spinners Stage */
+    .dual-spinner-stage {
+      display: flex;
+      align-items: center;
+      justify-content: space-evenly;
+      width: 100%;
+      height: 100%;
+      flex: 1;
+      gap: 1.5rem;
+    }
+
+    .dual-spinner-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.35rem;
+      flex: 1;
+      height: 100%;
+      max-width: 50%;
+    }
+
+    .dual-spinner-col .wheel-stage {
+      width: min(calc(100cqh - 6.5rem), calc(50cqw - 3rem), 380px);
+      height: min(calc(100cqh - 6.5rem), calc(50cqw - 3rem), 380px);
+      aspect-ratio: 1 / 1;
+      margin: 0.2rem auto;
+    }
+
+    .dual-spinner-col .wheel-pointer {
+      top: -16px;
+      margin-left: -15px;
+      border-left: 15px solid transparent;
+      border-right: 15px solid transparent;
+      border-top: 30px solid var(--danger);
+    }
+
+    .dual-spinner-title {
+      font-size: clamp(1.1rem, 2.5vh, 1.6rem);
+      font-weight: 800;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      flex-shrink: 0;
+    }
+
+    .dual-display-val {
+      font-size: clamp(1.8rem, 4.5vh, 3.2rem);
+      font-weight: 900;
+      letter-spacing: 1px;
+      text-align: center;
+      min-height: 1.15em;
+      text-transform: uppercase;
+      flex-shrink: 0;
+    }
+
+    .dual-display-val.celebrate {
+      animation: popCelebrate 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
     /* Top-to-Bottom Single Vertical Column Sequencer */
@@ -636,37 +689,6 @@
       white-space: nowrap;
       text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
       letter-spacing: 0.02em;
-    }
-
-    .pool-track {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.6rem;
-      flex-wrap: wrap;
-      max-width: 900px;
-      width: 100%;
-      min-height: 48px;
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      padding: 0.5rem 0.85rem;
-      border-radius: 16px;
-    }
-
-    .pool-chip {
-      padding: 0.4rem 0.85rem;
-      border-radius: 10px;
-      font-size: 0.95rem;
-      font-weight: 800;
-      background: var(--bg-input);
-      border: 1px solid var(--border-color);
-      color: var(--text-main);
-    }
-
-    .pool-chip.exhausted {
-      opacity: 0.3;
-      text-decoration: line-through;
-      border-style: dashed;
     }
 
     /* Control Deck & Buttons */
@@ -871,6 +893,7 @@
     <button class="nav-btn" onclick="switchView('partner-picker')">Partner Selector</button>
     <button class="nav-btn" onclick="switchView('seat-seq')">Seat Sequencer</button>
     <button class="nav-btn" onclick="switchView('team-picker')">Team Selector</button>
+    <button class="nav-btn" onclick="switchView('dual-picker')">Team & Student</button>
     <button class="nav-btn" onclick="switchView('team-seq')">Team Sequencer</button>
 
     <div class="nav-settings">
@@ -907,7 +930,7 @@
       </div>
 
       <div class="app-meta-footer">
-        <span>V1.7.0 (09-06-2026)</span>
+        <span>V2.3.0 (09-06-2026)</span>
       </div>
     </div>
   </nav>
@@ -916,11 +939,10 @@
     <!-- 1. Seat Selector (Default Active) -->
     <section id="view-seat-picker" class="tool-view active">
       <div class="display-box">
-        <div class="turn-badge" id="seat-badge">Seats 1 - 4</div>
         <div class="wheel-stage">
           <div class="wheel-pointer" id="seat-pointer"></div>
           <div class="wheel-hub"></div>
-          <canvas id="seat-wheel-canvas" class="wheel-canvas" width="500" height="500"></canvas>
+          <canvas id="seat-wheel-canvas" class="wheel-canvas" width="600" height="600"></canvas>
         </div>
         <div class="display-digits" id="seat-display"></div>
         <div class="display-subtext-br" id="seat-backup-display"></div>
@@ -931,8 +953,6 @@
         <button class="action-btn btn-reset" onclick="resetSeatPicker()">Reset Pool</button>
         <button class="toggle-pill-btn active" id="seat-repeat-toggle" onclick="toggleNoRepeat('seat')">No Repeat: ON</button>
       </div>
-
-      <div class="pool-track" id="seat-pool-chips"></div>
     </section>
 
     <!-- 2. Partner Selector -->
@@ -951,11 +971,10 @@
       </div>
 
       <div class="display-box">
-        <div class="turn-badge">Partner Wheel</div>
         <div class="wheel-stage">
           <div class="wheel-pointer" id="partner-pointer"></div>
           <div class="wheel-hub"></div>
-          <canvas id="partner-wheel-canvas" class="wheel-canvas" width="500" height="500"></canvas>
+          <canvas id="partner-wheel-canvas" class="wheel-canvas" width="600" height="600"></canvas>
         </div>
         <div class="display-digits" id="partner-display"></div>
       </div>
@@ -969,7 +988,6 @@
     <!-- 3. Seat Sequencer -->
     <section id="view-seat-seq" class="tool-view">
       <div class="display-box">
-        <div class="turn-badge" id="seat-seq-badge">In Order</div>
         <div class="sequence-container" id="seat-seq-deck"></div>
       </div>
 
@@ -995,11 +1013,10 @@
       </div>
 
       <div class="display-box">
-        <div class="turn-badge" id="team-badge">Ready</div>
         <div class="wheel-stage">
           <div class="wheel-pointer" id="team-pointer"></div>
           <div class="wheel-hub"></div>
-          <canvas id="team-wheel-canvas" class="wheel-canvas" width="500" height="500"></canvas>
+          <canvas id="team-wheel-canvas" class="wheel-canvas" width="600" height="600"></canvas>
         </div>
         <div class="display-digits" id="team-display"></div>
       </div>
@@ -1009,11 +1026,59 @@
         <button class="action-btn btn-reset" onclick="resetTeamPicker()">Reset Pool</button>
         <button class="toggle-pill-btn active" id="team-repeat-toggle" onclick="toggleNoRepeat('team')">No Repeat: ON</button>
       </div>
-
-      <div class="pool-track" id="team-pool-chips"></div>
     </section>
 
-    <!-- 5. Team Sequencer -->
+    <!-- 5. Team & Student (Dual Independent Spinners) -->
+    <section id="view-dual-picker" class="tool-view">
+      <div class="top-config-strip">
+        <div class="config-card">
+          <div class="config-card-info">
+            <span class="config-card-label">Teams Count</span>
+            <span class="config-card-count" id="dual-team-count-val">8</span>
+          </div>
+          <div class="config-stepper">
+            <button class="config-stepper-btn" onclick="adjustDualTeamCount(1)">▲</button>
+            <button class="config-stepper-btn" onclick="adjustDualTeamCount(-1)">▼</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="display-box">
+        <div class="dual-spinner-stage">
+          <!-- Left: Team Spinner -->
+          <div class="dual-spinner-col">
+            <div class="dual-spinner-title">Team</div>
+            <div class="wheel-stage">
+              <div class="wheel-pointer" id="dual-team-pointer"></div>
+              <div class="wheel-hub"></div>
+              <canvas id="dual-team-wheel-canvas" class="wheel-canvas" width="600" height="600"></canvas>
+            </div>
+            <div class="dual-display-val" id="dual-team-display"></div>
+          </div>
+
+          <!-- Right: Student Seat Spinner -->
+          <div class="dual-spinner-col">
+            <div class="dual-spinner-title">Student Seat</div>
+            <div class="wheel-stage">
+              <div class="wheel-pointer" id="dual-seat-pointer"></div>
+              <div class="wheel-hub"></div>
+              <canvas id="dual-seat-wheel-canvas" class="wheel-canvas" width="600" height="600"></canvas>
+            </div>
+            <div class="dual-display-val" id="dual-seat-display"></div>
+          </div>
+        </div>
+        <div class="display-subtext-br" id="dual-backup-display"></div>
+      </div>
+
+      <div class="control-deck">
+        <button class="action-btn btn-pick" id="dual-team-spin-btn" onclick="spinDualTeamWheel()">Spin Team</button>
+        <button class="action-btn btn-pick" id="dual-seat-spin-btn" onclick="spinDualSeatWheel()">Spin Student</button>
+        <button class="action-btn btn-reset" onclick="resetDualPicker()">Reset Both</button>
+        <button class="toggle-pill-btn active" id="dual-repeat-toggle" onclick="toggleNoRepeat('dual')">Team No Repeat: ON</button>
+      </div>
+    </section>
+
+    <!-- 6. Team Sequencer -->
     <section id="view-team-seq" class="tool-view">
       <div class="top-config-strip">
         <div class="config-card">
@@ -1029,7 +1094,6 @@
       </div>
 
       <div class="display-box">
-        <div class="turn-badge" id="team-seq-badge">In Order</div>
         <div class="sequence-container" id="team-seq-deck"></div>
       </div>
 
@@ -1383,6 +1447,8 @@
       drawWheel(seatCanvas, seatItems, seatCurrentAngle, seatNoRepeat ? seatPool : null);
       drawWheel(partnerCanvas, partnerItems, partnerCurrentAngle);
       drawWheel(teamCanvas, teamItems, teamCurrentAngle, teamNoRepeat ? teamPool : null);
+      drawWheel(dualTeamCanvas, dualTeamItems, dualTeamCurrentAngle, dualNoRepeat ? dualTeamPool : null);
+      drawWheel(dualSeatCanvas, seatItems, dualSeatCurrentAngle, null);
     }
 
     function updateChime(val) {
@@ -1402,7 +1468,7 @@
     }
 
     /* -------------------------------------------------------------
-       WHEEL ENGINE
+       WHEEL ENGINE (High Resolution Canvas Draw)
     ------------------------------------------------------------- */
     const wheelPalette = [
       '#ef4444', '#f59e0b', '#10b981', '#06b6d4', 
@@ -1429,7 +1495,7 @@
 
         ctx.beginPath();
         ctx.moveTo(0, 0);
-        ctx.arc(0, 0, radius - 4, start, end);
+        ctx.arc(0, 0, radius - 6, start, end);
         ctx.closePath();
 
         if (isExhausted) {
@@ -1439,14 +1505,14 @@
         }
         ctx.fill();
 
-        ctx.lineWidth = 4;
+        ctx.lineWidth = 5;
         ctx.strokeStyle = '#1e2433';
         ctx.stroke();
 
         ctx.save();
         ctx.rotate(start + sliceAngle / 2);
         ctx.textAlign = 'right';
-        ctx.font = total > 10 ? 'bold 24px system-ui, sans-serif' : 'bold 30px system-ui, sans-serif';
+        ctx.font = total > 10 ? 'bold 28px system-ui, sans-serif' : 'bold 36px system-ui, sans-serif';
 
         if (isExhausted) {
           ctx.fillStyle = '#475569';
@@ -1454,10 +1520,10 @@
         } else {
           ctx.fillStyle = '#ffffff';
           ctx.shadowColor = 'rgba(0,0,0,0.6)';
-          ctx.shadowBlur = 6;
+          ctx.shadowBlur = 8;
         }
 
-        ctx.fillText(item.label, radius - 28, 10);
+        ctx.fillText(item.label, radius - 35, 12);
         ctx.restore();
       });
 
@@ -1497,7 +1563,7 @@
         if (currentSlice !== lastSlicePassed) {
           playTick();
           pointerEl.classList.add('kick');
-          setTimeout(() => pointerEl.classList.remove('kick'), 50);
+          setTimeout(() => pointerEl.classList.remove('kick'), 45);
           lastSlicePassed = currentSlice;
         }
 
@@ -1511,13 +1577,7 @@
       requestAnimationFrame(frame);
     }
 
-    /* 1. Seat Selector Logic */
-    let seatNoRepeat = true;
-    let seatPool = [1, 2, 3, 4];
-    let seatCurrentAngle = 0;
-    let seatSpinning = false;
-    const seatCanvas = document.getElementById('seat-wheel-canvas');
-
+    /* Common Seat Config */
     const seatColorMap = {
       1: '#ef4444',
       2: '#3b82f6',
@@ -1536,22 +1596,16 @@
       { label: 'Seat 4', id: 4, color: seatColorMap[4] }
     ];
 
+    /* 1. Seat Selector Logic */
+    let seatNoRepeat = true;
+    let seatPool = [1, 2, 3, 4];
+    let seatCurrentAngle = 0;
+    let seatSpinning = false;
+    const seatCanvas = document.getElementById('seat-wheel-canvas');
+
     function initSeatPool() {
       seatPool = [1, 2, 3, 4];
       drawWheel(seatCanvas, seatItems, seatCurrentAngle, seatNoRepeat ? seatPool : null);
-      renderSeatPoolChips();
-    }
-
-    function renderSeatPoolChips() {
-      const container = document.getElementById('seat-pool-chips');
-      container.innerHTML = '';
-      [1, 2, 3, 4].forEach(s => {
-        const chip = document.createElement('div');
-        chip.className = 'pool-chip';
-        if (!seatPool.includes(s) && seatNoRepeat) chip.classList.add('exhausted');
-        chip.innerText = `Seat ${s}`;
-        container.appendChild(chip);
-      });
     }
 
     function spinSeatWheel() {
@@ -1590,10 +1644,8 @@
         disp.innerText = `Seat ${chosenSeat}`;
         disp.classList.add('celebrate');
         document.getElementById('seat-backup-display').innerText = `Seat ${altSeat}`;
-        document.getElementById('seat-badge').innerText = seatNoRepeat ? `${seatPool.length} Left` : 'No Repeat Off';
         
         drawWheel(seatCanvas, seatItems, seatCurrentAngle, seatNoRepeat ? seatPool : null);
-        renderSeatPoolChips();
         playChime();
       });
     }
@@ -1603,7 +1655,6 @@
       initSeatPool();
       document.getElementById('seat-display').innerText = '';
       document.getElementById('seat-backup-display').innerText = '';
-      document.getElementById('seat-badge').innerText = 'Seats 1 - 4';
     }
 
     function toggleNoRepeat(type) {
@@ -1619,6 +1670,12 @@
         btn.innerText = `No Repeat: ${seatNoRepeat ? 'ON' : 'OFF'}`;
         btn.classList.toggle('active', seatNoRepeat);
         initSeatPool();
+      } else if (type === 'dual') {
+        dualNoRepeat = !dualNoRepeat;
+        const btn = document.getElementById('dual-repeat-toggle');
+        btn.innerText = `Team No Repeat: ${dualNoRepeat ? 'ON' : 'OFF'}`;
+        btn.classList.toggle('active', dualNoRepeat);
+        initDualTeamPool();
       }
     }
 
@@ -1633,8 +1690,8 @@
 
     function initPartnerItems() {
       partnerItems = [];
-      const colorA = '#3b82f6';
-      const colorB = '#ec4899';
+      const colorA = '#059669';
+      const colorB = '#d97706';
       for (let i = 0; i < partnerWedgeCount; i++) {
         const isA = i % 2 === 0;
         partnerItems.push({
@@ -1769,7 +1826,6 @@
         card.innerHTML = `<div class="seq-step-val">Seat ${seat}</div>`;
         deck.appendChild(card);
       });
-      document.getElementById('seat-seq-badge').innerText = 'In Order';
     }
 
     function runSeatShellGame() {
@@ -1782,12 +1838,9 @@
         renderOrderedSeatCards();
       }
 
-      document.getElementById('seat-seq-badge').innerText = 'Shuffling...';
-
       animateShellGame(deck, () => {
         seatSeqRunning = false;
         document.getElementById('seat-seq-btn').disabled = false;
-        document.getElementById('seat-seq-badge').innerText = 'Random Order';
         Array.from(deck.children).forEach(c => c.classList.add('celebrate'));
         playChime();
       });
@@ -1815,7 +1868,6 @@
         color: wheelPalette[i % wheelPalette.length]
       }));
       drawWheel(teamCanvas, teamItems, teamCurrentAngle, teamNoRepeat ? teamPool : null);
-      renderTeamPoolChips();
     }
 
     function adjustTeamCount(delta) {
@@ -1826,18 +1878,6 @@
         document.getElementById('team-count-val').innerText = teamCount;
         initTeamPool();
         document.getElementById('team-display').innerText = '';
-      }
-    }
-
-    function renderTeamPoolChips() {
-      const container = document.getElementById('team-pool-chips');
-      container.innerHTML = '';
-      for (let i = 1; i <= teamCount; i++) {
-        const chip = document.createElement('div');
-        chip.className = 'pool-chip';
-        if (!teamPool.includes(i) && teamNoRepeat) chip.classList.add('exhausted');
-        chip.innerText = `Team ${i}`;
-        container.appendChild(chip);
       }
     }
 
@@ -1870,10 +1910,8 @@
         const disp = document.getElementById('team-display');
         disp.innerText = `Team ${chosenVal}`;
         disp.classList.add('celebrate');
-        document.getElementById('team-badge').innerText = teamNoRepeat ? `${teamPool.length} Left` : 'No Repeat Off';
         
         drawWheel(teamCanvas, teamItems, teamCurrentAngle, teamNoRepeat ? teamPool : null);
-        renderTeamPoolChips();
         playChime();
       });
     }
@@ -1882,10 +1920,116 @@
       if (teamSpinning) return;
       initTeamPool();
       document.getElementById('team-display').innerText = '';
-      document.getElementById('team-badge').innerText = 'Ready';
     }
 
-    /* 5. Team Sequencer Logic */
+    /* 5. Team & Student (Dual Independent Spinners) Logic */
+    let dualTeamCount = 8;
+    let dualNoRepeat = true;
+    let dualTeamPool = [];
+    let dualTeamCurrentAngle = 0;
+    let dualSeatCurrentAngle = 0;
+    let dualTeamSpinning = false;
+    let dualSeatSpinning = false;
+    const dualTeamCanvas = document.getElementById('dual-team-wheel-canvas');
+    const dualSeatCanvas = document.getElementById('dual-seat-wheel-canvas');
+    let dualTeamItems = [];
+
+    function initDualTeamPool() {
+      dualTeamPool = Array.from({ length: dualTeamCount }, (_, i) => i + 1);
+      dualTeamItems = Array.from({ length: dualTeamCount }, (_, i) => ({
+        label: `T${i+1}`,
+        id: i + 1,
+        color: wheelPalette[i % wheelPalette.length]
+      }));
+      drawWheel(dualTeamCanvas, dualTeamItems, dualTeamCurrentAngle, dualNoRepeat ? dualTeamPool : null);
+    }
+
+    function adjustDualTeamCount(delta) {
+      if (dualTeamSpinning) return;
+      const newCount = dualTeamCount + delta;
+      if (newCount >= 3 && newCount <= 9) {
+        dualTeamCount = newCount;
+        document.getElementById('dual-team-count-val').innerText = dualTeamCount;
+        initDualTeamPool();
+        document.getElementById('dual-team-display').innerText = '';
+      }
+    }
+
+    function spinDualTeamWheel() {
+      if (dualTeamSpinning) return;
+      if (dualNoRepeat && dualTeamPool.length === 0) {
+        initDualTeamPool();
+      }
+
+      dualTeamSpinning = true;
+      document.getElementById('dual-team-spin-btn').disabled = true;
+      document.getElementById('dual-team-display').classList.remove('celebrate');
+      document.getElementById('dual-team-display').innerText = '...';
+
+      const pool = dualNoRepeat ? dualTeamPool : Array.from({ length: dualTeamCount }, (_, i) => i + 1);
+      const chosenTeam = pool[Math.floor(Math.random() * pool.length)];
+      const targetIndex = dualTeamItems.findIndex(item => item.id === chosenTeam);
+
+      const pointer = document.getElementById('dual-team-pointer');
+      animateWheelSpin(dualTeamCanvas, pointer, dualTeamItems, dualTeamCurrentAngle, targetIndex, dualNoRepeat ? dualTeamPool : null, (newAngle) => {
+        dualTeamCurrentAngle = newAngle;
+        dualTeamSpinning = false;
+        document.getElementById('dual-team-spin-btn').disabled = false;
+
+        if (dualNoRepeat) {
+          const idx = dualTeamPool.indexOf(chosenTeam);
+          if (idx !== -1) dualTeamPool.splice(idx, 1);
+        }
+
+        const disp = document.getElementById('dual-team-display');
+        disp.innerText = `Team ${chosenTeam}`;
+        disp.classList.add('celebrate');
+
+        drawWheel(dualTeamCanvas, dualTeamItems, dualTeamCurrentAngle, dualNoRepeat ? dualTeamPool : null);
+        playChime();
+      });
+    }
+
+    function spinDualSeatWheel() {
+      if (dualSeatSpinning) return;
+
+      dualSeatSpinning = true;
+      document.getElementById('dual-seat-spin-btn').disabled = true;
+      document.getElementById('dual-seat-display').classList.remove('celebrate');
+      document.getElementById('dual-seat-display').innerText = '...';
+      document.getElementById('dual-backup-display').innerText = '';
+
+      const chosenSeat = Math.floor(Math.random() * 4) + 1;
+      const matchingIndices = seatItems
+        .map((item, idx) => item.id === chosenSeat ? idx : -1)
+        .filter(idx => idx !== -1);
+      const targetIndex = matchingIndices[Math.floor(Math.random() * matchingIndices.length)];
+
+      const pointer = document.getElementById('dual-seat-pointer');
+      animateWheelSpin(dualSeatCanvas, pointer, seatItems, dualSeatCurrentAngle, targetIndex, null, (newAngle) => {
+        dualSeatCurrentAngle = newAngle;
+        dualSeatSpinning = false;
+        document.getElementById('dual-seat-spin-btn').disabled = false;
+
+        const altSeat = (chosenSeat % 4) + 1;
+        const disp = document.getElementById('dual-seat-display');
+        disp.innerText = `Seat ${chosenSeat}`;
+        disp.classList.add('celebrate');
+        document.getElementById('dual-backup-display').innerText = `Seat ${altSeat}`;
+        playChime();
+      });
+    }
+
+    function resetDualPicker() {
+      if (dualTeamSpinning || dualSeatSpinning) return;
+      initDualTeamPool();
+      drawWheel(dualSeatCanvas, seatItems, dualSeatCurrentAngle, null);
+      document.getElementById('dual-team-display').innerText = '';
+      document.getElementById('dual-seat-display').innerText = '';
+      document.getElementById('dual-backup-display').innerText = '';
+    }
+
+    /* 6. Team Sequencer Logic */
     let seqTeamCount = 8;
     let teamSeqRunning = false;
 
@@ -1899,7 +2043,6 @@
         card.innerHTML = `<div class="seq-step-val">Team ${i}</div>`;
         deck.appendChild(card);
       }
-      document.getElementById('team-seq-badge').innerText = 'In Order';
     }
 
     function adjustSeqTeamCount(delta) {
@@ -1922,12 +2065,9 @@
         renderOrderedTeamCards();
       }
 
-      document.getElementById('team-seq-badge').innerText = 'Shuffling...';
-
       animateShellGame(deck, () => {
         teamSeqRunning = false;
         document.getElementById('team-seq-btn').disabled = false;
-        document.getElementById('team-seq-badge').innerText = 'Random Order';
         Array.from(deck.children).forEach(c => c.classList.add('celebrate'));
         playChime();
       });
@@ -1955,6 +2095,8 @@
     initSeatPool();
     initPartnerItems();
     initTeamPool();
+    initDualTeamPool();
+    drawWheel(dualSeatCanvas, seatItems, dualSeatCurrentAngle, null);
 
     renderOrderedSeatCards();
     renderOrderedTeamCards();
