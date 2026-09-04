@@ -930,7 +930,7 @@
       </div>
 
       <div class="app-meta-footer">
-        <span>V2.3.0 (09-06-2026)</span>
+        <span>V1.0.0 (09-03-2026)</span>
       </div>
     </div>
   </nav>
@@ -1277,7 +1277,7 @@
         osc.type = 'square';
         osc.frequency.setValueAtTime(880, audioCtx.currentTime + (i * 0.15));
         gain.gain.setValueAtTime(0.35, audioCtx.currentTime + (i * 0.15));
-        gain.gain.setValueAtTime(0.0001, audioCtx.currentTime + (i * 0.15) + 0.1);
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + (i * 0.15) + 0.1);
         osc.connect(gain);
         gain.connect(preGainNode);
         osc.start(audioCtx.currentTime + (i * 0.15));
