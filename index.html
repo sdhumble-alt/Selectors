@@ -928,7 +928,7 @@
       </button>
 
       <div class="app-meta-footer">
-        <span>V1.0.1 (09-04-2026)</span>
+        <span>V1.1.0 (09-15-2026)</span>
       </div>
     </div>
   </nav>
@@ -936,6 +936,19 @@
   <main>
     <!-- 1. Seat Selector (Default Active) -->
     <section id="view-seat-picker" class="tool-view active">
+      <div class="top-config-strip">
+        <div class="config-card">
+          <div class="config-card-info">
+            <span class="config-card-label">Seats Per Group</span>
+            <span class="config-card-count" id="seat-count-val">4</span>
+          </div>
+          <div class="config-stepper">
+            <button class="config-stepper-btn" onclick="adjustSeatCount(1)">▲</button>
+            <button class="config-stepper-btn" onclick="adjustSeatCount(-1)">▼</button>
+          </div>
+        </div>
+      </div>
+
       <div class="display-box">
         <div class="wheel-stage">
           <div class="wheel-pointer" id="seat-pointer"></div>
@@ -985,6 +998,19 @@
 
     <!-- 3. Seat Sequencer -->
     <section id="view-seat-seq" class="tool-view">
+      <div class="top-config-strip">
+        <div class="config-card">
+          <div class="config-card-info">
+            <span class="config-card-label">Seats to Order</span>
+            <span class="config-card-count" id="seat-seq-count-val">4</span>
+          </div>
+          <div class="config-stepper">
+            <button class="config-stepper-btn" onclick="adjustSeqSeatCount(1)">▲</button>
+            <button class="config-stepper-btn" onclick="adjustSeqSeatCount(-1)">▼</button>
+          </div>
+        </div>
+      </div>
+
       <div class="display-box">
         <div class="sequence-container" id="seat-seq-deck"></div>
       </div>
@@ -1037,6 +1063,17 @@
           <div class="config-stepper">
             <button class="config-stepper-btn" onclick="adjustDualTeamCount(1)">▲</button>
             <button class="config-stepper-btn" onclick="adjustDualTeamCount(-1)">▼</button>
+          </div>
+        </div>
+
+        <div class="config-card">
+          <div class="config-card-info">
+            <span class="config-card-label">Seats Per Group</span>
+            <span class="config-card-count" id="dual-seat-count-val">4</span>
+          </div>
+          <div class="config-stepper">
+            <button class="config-stepper-btn" onclick="adjustDualSeatCount(1)">▲</button>
+            <button class="config-stepper-btn" onclick="adjustDualSeatCount(-1)">▼</button>
           </div>
         </div>
       </div>
@@ -1211,7 +1248,7 @@
     masterGainNode.connect(compressorNode);
     compressorNode.connect(audioCtx.destination);
 
-    // Default volume updated to 25%, preserved in localStorage
+    // Default volume at 25%, preserved in localStorage
     let currentVolume = parseFloat(localStorage.getItem('selector_volume') ?? '0.25');
     let currentChime = localStorage.getItem('selector_chime') ?? 'bell';
     let currentTheme = localStorage.getItem('selector_theme') ?? 'default';
@@ -1496,7 +1533,7 @@
       drawWheel(partnerCanvas, partnerItems, partnerCurrentAngle);
       drawWheel(teamCanvas, teamItems, teamCurrentAngle, teamNoRepeat ? teamPool : null);
       drawWheel(dualTeamCanvas, dualTeamItems, dualTeamCurrentAngle, dualNoRepeat ? dualTeamPool : null);
-      drawWheel(dualSeatCanvas, seatItems, dualSeatCurrentAngle, null);
+      drawWheel(dualSeatCanvas, dualSeatItems, dualSeatCurrentAngle, null);
     }
 
     function updateChime(val) {
@@ -1625,35 +1662,56 @@
       requestAnimationFrame(frame);
     }
 
-    /* Seat Color Mapping: Seat 1 Yellow, Seat 2 Green, Seat 3 Blue, Seat 4 Red */
+    /* Seat Color Mapping: 1 Yellow, 2 Green, 3 Blue, 4 Red, 5 Purple, 6 Teal */
     const seatColorMap = {
       1: '#f59e0b', // Yellow / Amber
       2: '#10b981', // Green
       3: '#3b82f6', // Blue
-      4: '#ef4444'  // Red
+      4: '#ef4444', // Red
+      5: '#8b5cf6', // Purple
+      6: '#06b6d4'  // Teal
     };
 
-    const seatItems = [
-      { label: 'Seat 1', id: 1, color: seatColorMap[1] },
-      { label: 'Seat 2', id: 2, color: seatColorMap[2] },
-      { label: 'Seat 3', id: 3, color: seatColorMap[3] },
-      { label: 'Seat 4', id: 4, color: seatColorMap[4] },
-      { label: 'Seat 1', id: 1, color: seatColorMap[1] },
-      { label: 'Seat 2', id: 2, color: seatColorMap[2] },
-      { label: 'Seat 3', id: 3, color: seatColorMap[3] },
-      { label: 'Seat 4', id: 4, color: seatColorMap[4] }
-    ];
+    function buildSeatItems(count) {
+      const items = [];
+      // Repeat the cycle twice so the wheel always has engaging multiple wedges (6 to 12 wedges)
+      for (let r = 0; r < 2; r++) {
+        for (let s = 1; s <= count; s++) {
+          items.push({
+            label: `Seat ${s}`,
+            id: s,
+            color: seatColorMap[s] || wheelPalette[(s - 1) % wheelPalette.length]
+          });
+        }
+      }
+      return items;
+    }
 
-    /* 1. Seat Selector Logic */
+    /* 1. Seat Selector Logic (Adjustable 3-6, default 4) */
+    let seatCount = 4;
     let seatNoRepeat = true;
     let seatPool = [1, 2, 3, 4];
     let seatCurrentAngle = 0;
     let seatSpinning = false;
     const seatCanvas = document.getElementById('seat-wheel-canvas');
+    let seatItems = buildSeatItems(seatCount);
 
     function initSeatPool() {
-      seatPool = [1, 2, 3, 4];
+      seatPool = Array.from({ length: seatCount }, (_, i) => i + 1);
+      seatItems = buildSeatItems(seatCount);
       drawWheel(seatCanvas, seatItems, seatCurrentAngle, seatNoRepeat ? seatPool : null);
+    }
+
+    function adjustSeatCount(delta) {
+      if (seatSpinning) return;
+      const nextCount = seatCount + delta;
+      if (nextCount >= 3 && nextCount <= 6) {
+        seatCount = nextCount;
+        document.getElementById('seat-count-val').innerText = seatCount;
+        initSeatPool();
+        document.getElementById('seat-display').innerText = '';
+        document.getElementById('seat-backup-display').innerText = '';
+      }
     }
 
     function spinSeatWheel() {
@@ -1668,7 +1726,7 @@
       document.getElementById('seat-display').innerText = '...';
       document.getElementById('seat-backup-display').innerText = '';
 
-      const pool = seatNoRepeat ? seatPool : [1, 2, 3, 4];
+      const pool = seatNoRepeat ? seatPool : Array.from({ length: seatCount }, (_, i) => i + 1);
       const chosenSeat = pool[Math.floor(Math.random() * pool.length)];
 
       const matchingIndices = seatItems
@@ -1687,7 +1745,7 @@
           if (idx !== -1) seatPool.splice(idx, 1);
         }
 
-        const altSeat = (chosenSeat % 4) + 1;
+        const altSeat = (chosenSeat % seatCount) + 1;
         const disp = document.getElementById('seat-display');
         disp.innerText = `Seat ${chosenSeat}`;
         disp.classList.add('celebrate');
@@ -1861,19 +1919,30 @@
       }, intervalMs);
     }
 
-    /* 3. Seat Sequencer Logic */
+    /* 3. Seat Sequencer Logic (Adjustable 3-6, default 4) */
+    let seqSeatCount = 4;
     let seatSeqRunning = false;
 
     function renderOrderedSeatCards() {
       const deck = document.getElementById('seat-seq-deck');
       deck.innerHTML = '';
-      [1, 2, 3, 4].forEach(seat => {
+      for (let s = 1; s <= seqSeatCount; s++) {
         const card = document.createElement('div');
         card.className = 'seq-step-card';
-        card.style.backgroundColor = seatColorMap[seat];
-        card.innerHTML = `<div class="seq-step-val">Seat ${seat}</div>`;
+        card.style.backgroundColor = seatColorMap[s] || wheelPalette[(s - 1) % wheelPalette.length];
+        card.innerHTML = `<div class="seq-step-val">Seat ${s}</div>`;
         deck.appendChild(card);
-      });
+      }
+    }
+
+    function adjustSeqSeatCount(delta) {
+      if (seatSeqRunning) return;
+      const next = seqSeatCount + delta;
+      if (next >= 3 && next <= 6) {
+        seqSeatCount = next;
+        document.getElementById('seat-seq-count-val').innerText = seqSeatCount;
+        renderOrderedSeatCards();
+      }
     }
 
     function runSeatShellGame() {
@@ -1972,6 +2041,7 @@
 
     /* 5. Team & Student (Dual Independent Spinners) Logic */
     let dualTeamCount = 8;
+    let dualSeatCount = 4;
     let dualNoRepeat = true;
     let dualTeamPool = [];
     let dualTeamCurrentAngle = 0;
@@ -1981,6 +2051,7 @@
     const dualTeamCanvas = document.getElementById('dual-team-wheel-canvas');
     const dualSeatCanvas = document.getElementById('dual-seat-wheel-canvas');
     let dualTeamItems = [];
+    let dualSeatItems = buildSeatItems(dualSeatCount);
 
     function initDualTeamPool() {
       dualTeamPool = Array.from({ length: dualTeamCount }, (_, i) => i + 1);
@@ -1992,6 +2063,11 @@
       drawWheel(dualTeamCanvas, dualTeamItems, dualTeamCurrentAngle, dualNoRepeat ? dualTeamPool : null);
     }
 
+    function initDualSeatWheel() {
+      dualSeatItems = buildSeatItems(dualSeatCount);
+      drawWheel(dualSeatCanvas, dualSeatItems, dualSeatCurrentAngle, null);
+    }
+
     function adjustDualTeamCount(delta) {
       if (dualTeamSpinning) return;
       const newCount = dualTeamCount + delta;
@@ -2000,6 +2076,18 @@
         document.getElementById('dual-team-count-val').innerText = dualTeamCount;
         initDualTeamPool();
         document.getElementById('dual-team-display').innerText = '';
+      }
+    }
+
+    function adjustDualSeatCount(delta) {
+      if (dualSeatSpinning) return;
+      const nextSeat = dualSeatCount + delta;
+      if (nextSeat >= 3 && nextSeat <= 6) {
+        dualSeatCount = nextSeat;
+        document.getElementById('dual-seat-count-val').innerText = dualSeatCount;
+        initDualSeatWheel();
+        document.getElementById('dual-seat-display').innerText = '';
+        document.getElementById('dual-backup-display').innerText = '';
       }
     }
 
@@ -2047,19 +2135,19 @@
       document.getElementById('dual-seat-display').innerText = '...';
       document.getElementById('dual-backup-display').innerText = '';
 
-      const chosenSeat = Math.floor(Math.random() * 4) + 1;
-      const matchingIndices = seatItems
+      const chosenSeat = Math.floor(Math.random() * dualSeatCount) + 1;
+      const matchingIndices = dualSeatItems
         .map((item, idx) => item.id === chosenSeat ? idx : -1)
         .filter(idx => idx !== -1);
       const targetIndex = matchingIndices[Math.floor(Math.random() * matchingIndices.length)];
 
       const pointer = document.getElementById('dual-seat-pointer');
-      animateWheelSpin(dualSeatCanvas, pointer, seatItems, dualSeatCurrentAngle, targetIndex, null, (newAngle) => {
+      animateWheelSpin(dualSeatCanvas, pointer, dualSeatItems, dualSeatCurrentAngle, targetIndex, null, (newAngle) => {
         dualSeatCurrentAngle = newAngle;
         dualSeatSpinning = false;
         document.getElementById('dual-seat-spin-btn').disabled = false;
 
-        const altSeat = (chosenSeat % 4) + 1;
+        const altSeat = (chosenSeat % dualSeatCount) + 1;
         const disp = document.getElementById('dual-seat-display');
         disp.innerText = `Seat ${chosenSeat}`;
         disp.classList.add('celebrate');
@@ -2071,7 +2159,7 @@
     function resetDualPicker() {
       if (dualTeamSpinning || dualSeatSpinning) return;
       initDualTeamPool();
-      drawWheel(dualSeatCanvas, seatItems, dualSeatCurrentAngle, null);
+      initDualSeatWheel();
       document.getElementById('dual-team-display').innerText = '';
       document.getElementById('dual-seat-display').innerText = '';
       document.getElementById('dual-backup-display').innerText = '';
@@ -2144,7 +2232,7 @@
     initPartnerItems();
     initTeamPool();
     initDualTeamPool();
-    drawWheel(dualSeatCanvas, seatItems, dualSeatCurrentAngle, null);
+    initDualSeatWheel();
 
     renderOrderedSeatCards();
     renderOrderedTeamCards();
