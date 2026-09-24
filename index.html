@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Classroom Student Selectors</title>
+  <!-- Option 1: Spinner Wheel with Arrow Pointer Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23131722'/%3E%3Cg transform='translate(16, 17)'%3E%3Cpath d='M0 0 L0 -11 A11 11 0 0 1 11 0 Z' fill='%23ef4444'/%3E%3Cpath d='M0 0 L11 0 A11 11 0 0 1 0 11 Z' fill='%233b82f6'/%3E%3Cpath d='M0 0 L0 11 A11 11 0 0 1 -11 0 Z' fill='%2310b981'/%3E%3Cpath d='M0 0 L-11 0 A11 11 0 0 1 0 -11 Z' fill='%23f59e0b'/%3E%3Ccircle cx='0' cy='0' r='3.5' fill='%231e2433' stroke='%23334155' stroke-width='1'/%3E%3C/g%3E%3Cpolygon points='16,3 13,8 19,8' fill='%23ef4444' stroke='%23ffffff' stroke-width='0.75'/%3E%3C/svg%3E">
   <style>
     /* Theme Palettes & Typography */
     :root {
@@ -440,13 +442,13 @@
       align-items: center;
       justify-content: center;
       position: relative;
-      padding: 1.5rem 1rem 1rem 1rem;
-      overflow: visible;
+      padding: 1.25rem;
+      overflow: hidden;
       container-type: size;
     }
 
     .display-digits {
-      font-size: clamp(2.5rem, 6cqh, 4.8rem);
+      font-size: clamp(2.4rem, 6cqh, 4.4rem);
       font-weight: 900;
       letter-spacing: 2px;
       text-align: center;
@@ -455,6 +457,7 @@
       text-transform: uppercase;
       min-height: 1.15em;
       flex-shrink: 0;
+      margin-top: 0.35rem;
     }
 
     .display-digits.celebrate {
@@ -467,23 +470,11 @@
       100% { transform: scale(1); }
     }
 
-    .display-subtext-br {
-      position: absolute;
-      bottom: 1.25rem;
-      right: 1.5rem;
-      font-size: clamp(1.4rem, 3.2vw, 2.3rem);
-      font-weight: 900;
-      color: var(--warning);
-      text-align: right;
-      letter-spacing: 0.04em;
-      pointer-events: none;
-    }
-
-    /* Interactive Whimsical Wheel (Responsive Sizing) */
+    /* Interactive Wheel Stage - Unconstrained to Fill Max Area */
     .wheel-stage {
       position: relative;
-      width: min(calc(100cqh - 5.5rem), calc(100cqw - 4rem), 520px);
-      height: min(calc(100cqh - 5.5rem), calc(100cqw - 4rem), 520px);
+      width: min(calc(100cqh - 5.5rem), calc(100cqw - 2rem));
+      height: min(calc(100cqh - 5.5rem), calc(100cqw - 2rem));
       aspect-ratio: 1 / 1;
       display: flex;
       align-items: center;
@@ -556,8 +547,8 @@
     }
 
     .dual-spinner-col .wheel-stage {
-      width: min(calc(100cqh - 6.5rem), calc(50cqw - 3rem), 380px);
-      height: min(calc(100cqh - 6.5rem), calc(50cqw - 3rem), 380px);
+      width: min(calc(100cqh - 6.5rem), calc(50cqw - 2rem));
+      height: min(calc(100cqh - 6.5rem), calc(50cqw - 2rem));
       aspect-ratio: 1 / 1;
       margin: 0.2rem auto;
     }
@@ -593,41 +584,41 @@
       animation: popCelebrate 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
-    /* Top-to-Bottom Single Vertical Column Sequencer */
+    /* Full-Screen Fill Sequencer Container */
     .sequence-container {
       display: flex;
       flex-direction: column;
       flex-wrap: nowrap;
-      align-items: center;
-      justify-content: center;
-      gap: clamp(0.35rem, 1vh, 0.75rem);
+      align-items: stretch;
+      justify-content: space-between;
+      gap: clamp(0.5rem, 1.5vh, 1.25rem);
       width: 100%;
       height: 100%;
-      max-height: 100%;
-      margin: auto;
+      padding: 0.5rem 0.25rem;
+      box-sizing: border-box;
       overflow: hidden;
     }
 
+    /* Edge-to-Edge Sequencer Cards Filling Available Area */
     .seq-step-card {
-      border: 3px solid rgba(255, 255, 255, 0.3);
-      border-radius: 16px;
-      padding: 0.2rem 1.25rem;
+      border: 4px solid rgba(255, 255, 255, 0.8);
+      border-radius: 22px;
+      padding: 0.5rem 1.5rem;
       display: flex;
       align-items: center;
       justify-content: center;
       text-align: center;
-      width: clamp(200px, 30vw, 320px);
-      flex: 1 1 auto;
-      max-height: 52px;
-      min-height: 38px;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+      width: 100%;
+      flex: 1 1 0;
+      min-height: 48px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
       color: #ffffff;
       transition: transform 0.15s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.15s ease;
       will-change: transform;
     }
 
     .seq-step-card.shell-swapping {
-      box-shadow: 0 14px 28px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.7);
       z-index: 20;
     }
 
@@ -635,15 +626,24 @@
       animation: popCelebrate 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
+    /* Solid White Text with Perfect Black Outline (No Pinch Artifacts) */
     .seq-step-val {
-      font-size: clamp(1.2rem, 2.5vh, 1.75rem);
+      font-size: clamp(2rem, 5vh, 3.4rem);
       font-weight: 900;
       color: #ffffff;
       text-align: center;
       width: 100%;
       white-space: nowrap;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
-      letter-spacing: 0.02em;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      paint-order: stroke fill;
+      -webkit-text-stroke: 4px #000000;
+      text-shadow: 
+        -2px -2px 0 #000,
+         2px -2px 0 #000,
+        -2px  2px 0 #000,
+         2px  2px 0 #000,
+         0 4px 12px rgba(0, 0, 0, 0.85);
     }
 
     /* Control Deck & Buttons */
@@ -928,7 +928,7 @@
       </button>
 
       <div class="app-meta-footer">
-        <span>V1.1.0 (09-15-2026)</span>
+        <span>V1.2.0 (09-24-2026)</span>
       </div>
     </div>
   </nav>
@@ -956,7 +956,6 @@
           <canvas id="seat-wheel-canvas" class="wheel-canvas" width="600" height="600"></canvas>
         </div>
         <div class="display-digits" id="seat-display"></div>
-        <div class="display-subtext-br" id="seat-backup-display"></div>
       </div>
 
       <div class="control-deck">
@@ -1102,7 +1101,6 @@
             <div class="dual-display-val" id="dual-seat-display"></div>
           </div>
         </div>
-        <div class="display-subtext-br" id="dual-backup-display"></div>
       </div>
 
       <div class="control-deck">
@@ -1248,7 +1246,6 @@
     masterGainNode.connect(compressorNode);
     compressorNode.connect(audioCtx.destination);
 
-    // Default volume at 25%, preserved in localStorage
     let currentVolume = parseFloat(localStorage.getItem('selector_volume') ?? '0.25');
     let currentChime = localStorage.getItem('selector_chime') ?? 'bell';
     let currentTheme = localStorage.getItem('selector_theme') ?? 'default';
@@ -1292,7 +1289,7 @@
       { id: 'high-contrast', name: 'High Contrast', desc: 'Bold Accessibility' }
     ];
 
-    /* Chime Definitions with Silent / Spinner-Only Option */
+    /* Chime Definitions */
     const chimesList = [
       { id: 'none', name: 'No Sound', desc: 'Silent (Spinner Ticks Only)' },
       { id: 'bell', name: 'Bell Toll', desc: 'Two Deep Church Chimes' },
@@ -1305,13 +1302,14 @@
       { id: 'sonar', name: 'Radar Ping', desc: 'Submarine Echo' }
     ];
 
+    /* Restored Original 900 Hz Tone (Louder Relative to Chime) */
     function playTick() {
       if (audioCtx.state === 'suspended') audioCtx.resume();
       const osc = audioCtx.createOscillator();
       const gain = audioCtx.createGain();
       osc.type = 'triangle';
       osc.frequency.setValueAtTime(900, audioCtx.currentTime);
-      gain.gain.setValueAtTime(0.18, audioCtx.currentTime);
+      gain.gain.setValueAtTime(0.95, audioCtx.currentTime);
       gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.035);
       osc.connect(gain);
       gain.connect(preGainNode);
@@ -1552,9 +1550,7 @@
       return a;
     }
 
-    /* -------------------------------------------------------------
-       WHEEL ENGINE (High Resolution Canvas Draw)
-    ------------------------------------------------------------- */
+    /* WHEEL ENGINE */
     const wheelPalette = [
       '#ef4444', '#f59e0b', '#10b981', '#06b6d4', 
       '#3b82f6', '#8b5cf6', '#ec4899', '#f97316', '#14b8a6'
@@ -1630,7 +1626,6 @@
       const extraSpins = speedConfig.minTurns * 2 * Math.PI;
       const totalDelta = deltaToFinal + extraSpins;
       const startAngle = currentAngle;
-      const finalAngle = currentAngle + totalDelta;
 
       const duration = speedConfig.duration;
       const startTime = performance.now();
@@ -1656,25 +1651,24 @@
           requestAnimationFrame(frame);
         } else {
           pointerEl.classList.remove('kick');
-          onComplete(finalAngle);
+          onComplete(startAngle + totalDelta);
         }
       }
       requestAnimationFrame(frame);
     }
 
-    /* Seat Color Mapping: 1 Yellow, 2 Green, 3 Blue, 4 Red, 5 Purple, 6 Teal */
+    /* Seat Color Mapping */
     const seatColorMap = {
-      1: '#f59e0b', // Yellow / Amber
-      2: '#10b981', // Green
-      3: '#3b82f6', // Blue
-      4: '#ef4444', // Red
-      5: '#8b5cf6', // Purple
-      6: '#06b6d4'  // Teal
+      1: '#f59e0b',
+      2: '#10b981',
+      3: '#3b82f6',
+      4: '#ef4444',
+      5: '#8b5cf6',
+      6: '#06b6d4'
     };
 
     function buildSeatItems(count) {
       const items = [];
-      // Repeat the cycle twice so the wheel always has engaging multiple wedges (6 to 12 wedges)
       for (let r = 0; r < 2; r++) {
         for (let s = 1; s <= count; s++) {
           items.push({
@@ -1687,7 +1681,7 @@
       return items;
     }
 
-    /* 1. Seat Selector Logic (Adjustable 3-6, default 4) */
+    /* 1. Seat Selector Logic */
     let seatCount = 4;
     let seatNoRepeat = true;
     let seatPool = [1, 2, 3, 4];
@@ -1710,7 +1704,6 @@
         document.getElementById('seat-count-val').innerText = seatCount;
         initSeatPool();
         document.getElementById('seat-display').innerText = '';
-        document.getElementById('seat-backup-display').innerText = '';
       }
     }
 
@@ -1724,7 +1717,6 @@
       document.getElementById('seat-spin-btn').disabled = true;
       document.getElementById('seat-display').classList.remove('celebrate');
       document.getElementById('seat-display').innerText = '...';
-      document.getElementById('seat-backup-display').innerText = '';
 
       const pool = seatNoRepeat ? seatPool : Array.from({ length: seatCount }, (_, i) => i + 1);
       const chosenSeat = pool[Math.floor(Math.random() * pool.length)];
@@ -1745,11 +1737,9 @@
           if (idx !== -1) seatPool.splice(idx, 1);
         }
 
-        const altSeat = (chosenSeat % seatCount) + 1;
         const disp = document.getElementById('seat-display');
         disp.innerText = `Seat ${chosenSeat}`;
         disp.classList.add('celebrate');
-        document.getElementById('seat-backup-display').innerText = `Seat ${altSeat}`;
         
         drawWheel(seatCanvas, seatItems, seatCurrentAngle, seatNoRepeat ? seatPool : null);
         playChime();
@@ -1760,7 +1750,6 @@
       if (seatSpinning) return;
       initSeatPool();
       document.getElementById('seat-display').innerText = '';
-      document.getElementById('seat-backup-display').innerText = '';
     }
 
     function toggleNoRepeat(type) {
@@ -1796,8 +1785,8 @@
 
     function initPartnerItems() {
       partnerItems = [];
-      const colorA = '#059669'; // Emerald Teal
-      const colorB = '#d97706'; // Warm Amber Gold
+      const colorA = '#059669';
+      const colorB = '#d97706';
       for (let i = 0; i < partnerWedgeCount; i++) {
         const isA = i % 2 === 0;
         partnerItems.push({
@@ -1858,9 +1847,7 @@
       });
     }
 
-    /* -------------------------------------------------------------
-       SHELL GAME SEQUENCER ENGINE (FLIP ANIMATION)
-    ------------------------------------------------------------- */
+    /* SHELL GAME SEQUENCER ENGINE */
     function animateShellGame(deckElement, onComplete) {
       const cards = Array.from(deckElement.children);
       if (cards.length === 0) return;
@@ -1889,8 +1876,8 @@
         const deltaX_B = rectA.left - rectB.left;
         const deltaY_B = rectA.top - rectB.top;
 
-        cardA.style.transform = `translate(${deltaX_A}px, ${deltaY_A}px) scale(1.05)`;
-        cardB.style.transform = `translate(${deltaX_B}px, ${deltaY_B}px) scale(0.95)`;
+        cardA.style.transform = `translate(${deltaX_A}px, ${deltaY_A}px) scale(1.02)`;
+        cardB.style.transform = `translate(${deltaX_B}px, ${deltaY_B}px) scale(0.98)`;
         playTick();
 
         setTimeout(() => {
@@ -1919,7 +1906,7 @@
       }, intervalMs);
     }
 
-    /* 3. Seat Sequencer Logic (Adjustable 3-6, default 4) */
+    /* 3. Seat Sequencer Logic */
     let seqSeatCount = 4;
     let seatSeqRunning = false;
 
@@ -2087,7 +2074,6 @@
         document.getElementById('dual-seat-count-val').innerText = dualSeatCount;
         initDualSeatWheel();
         document.getElementById('dual-seat-display').innerText = '';
-        document.getElementById('dual-backup-display').innerText = '';
       }
     }
 
@@ -2133,7 +2119,6 @@
       document.getElementById('dual-seat-spin-btn').disabled = true;
       document.getElementById('dual-seat-display').classList.remove('celebrate');
       document.getElementById('dual-seat-display').innerText = '...';
-      document.getElementById('dual-backup-display').innerText = '';
 
       const chosenSeat = Math.floor(Math.random() * dualSeatCount) + 1;
       const matchingIndices = dualSeatItems
@@ -2147,11 +2132,9 @@
         dualSeatSpinning = false;
         document.getElementById('dual-seat-spin-btn').disabled = false;
 
-        const altSeat = (chosenSeat % dualSeatCount) + 1;
         const disp = document.getElementById('dual-seat-display');
         disp.innerText = `Seat ${chosenSeat}`;
         disp.classList.add('celebrate');
-        document.getElementById('dual-backup-display').innerText = `Seat ${altSeat}`;
         playChime();
       });
     }
@@ -2162,7 +2145,6 @@
       initDualSeatWheel();
       document.getElementById('dual-team-display').innerText = '';
       document.getElementById('dual-seat-display').innerText = '';
-      document.getElementById('dual-backup-display').innerText = '';
     }
 
     /* 6. Team Sequencer Logic */
